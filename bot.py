@@ -1,6 +1,6 @@
 import discord
 import pyowm
-
+import os
 
 client = discord.Client()
 
@@ -70,5 +70,5 @@ async def on_message(message):
 
     
 
-
-client.run('NjcyMTAwNzk5ODc0MjAzNjgw.XjGl1g.6dPJQLIDaSiG5CUvsLo0HhEof1g')
+access_token = os.environ["BOT_TOKEN"]
+client.run(access_token)
