@@ -1,2 +1,2 @@
 discord==1.0.1
-pyowm==2.20.0
+pyowm
