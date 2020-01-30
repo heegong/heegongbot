@@ -1,32 +1,10 @@
 import discord
-import asyncio
-import random
-import openpyxl
-from discord import Member
-from discord.ext import commands
-import youtube_dl
-from urllib.request import urlopen, Request
-import urllib
-import urllib.request
-import bs4
-import os
-import sys
-import json
-from selenium import webdriver
-import time
-import datetime
-from parser import *
-client = discord.Client()
-import requests
-from bs4 import BeautifulSoup
 import pyowm
+
+
+client = discord.Client()
+
  
-def get_html(url):
-   _html = ""
-   resp = requests.get(url)
-   if resp.status_code == 200:
-      _html = resp.text
-   return _html
 
 ###################################
 
