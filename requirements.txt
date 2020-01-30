@@ -1,2 +1,2 @@
-discord.py==1.0.1
-pyowm.py==2.20.0
+discord==1.0.1
+pyowm==2.20.0
