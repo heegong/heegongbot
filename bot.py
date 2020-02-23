@@ -348,7 +348,7 @@ async def on_message(message):
         l_diet = get_diet_bong(local_date2, local_weekday2)    
         lunch = "\n\n"+ local_date2 + "   내일 봉화중 급식 \n\n" + l_diet    
         if l_diet == " ":
-            await message.channel.send("오늘은 급식이 없어요 ㅠㅠㅠ")
+            await message.channel.send("내일은 급식이 없어요 ㅠㅠㅠ")
         else: 
             await message.channel.send(lunch)
 
