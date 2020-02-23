@@ -122,6 +122,67 @@ def han_river():
     return site
 
 
+def live_search():
+    URL = ("https://search.naver.com/search.naver?sm=top_hty&fbm=1&ie=utf8&query=ㅇ ㅇ")
+    html = get_html(URL)
+    
+    soup = BeautifulSoup(html, 'html.parser')
+    site = soup.find_all('span')
+    site = str(site)
+    site = site[43300:45000]
+    site = site.replace('"','')
+    site = site.replace('<','')
+    site = site.replace('>','')
+    site = site.replace('/','')
+    site = site.replace('s=tit _text','')
+    site = site.replace('span','')
+    site = site.replace('clas','')
+    site = site.replace('class','')
+    site = site.replace(' s=keyword em s=num1em  ','')
+    site = site.replace('  s=spim, NEW,  s=keyword em s=num2em  ','')
+    site = site.replace('  ','')
+    site = site.replace('s=spim, NEW,s=keyword em s=num3em','')
+    site = site.replace('s=spim, NEW,s=keyword em s=num4em','')
+    site = site.replace('s=spim, NEW,s=keyword em s=num5em','')
+    site = site.replace('s=spim, NEW,s=keyword em s=num6em','')
+    site = site.replace('s=spim, NEW,s=keyword em s=num7em','')
+    site = site.replace('s=spim, NEW,s=keyword em s=num8em','')
+    site = site.replace('s=keyword em s=num9em','')
+    site = site.replace('s=spim, NEW,s=keyword em s=num10em','')
+    site_ls = site.split(',')
+    for i in range(10):
+        del(site_ls[i])
+        
+    return site_ls
+
+
+def Colona():
+    URL = ("https://coronamap.site/")
+    html = get_html(URL)
+    
+    soup = BeautifulSoup(html, 'html.parser')
+    site = soup.find_all('div')
+    site = str(site)
+    site = site[3211:3604]
+    site = site.replace('</div>, <div>602</div>, <div class="content1 clear" style="font-size: 15px;justify-content:space-evenly;padding: 0 11px;">','')
+    site = site.replace('<div>','')
+    site = site.replace('</div>','')
+    site = site.replace('<div style="font-size:13px;color:rgb(47,181,105);font-weight:bolder;">완치','')
+    site = site.replace('<div style="width: 1px; height:100%; background:black;">','')
+    site = site.replace('<div style="font-size:13px;color:red;font-weight:bolder;">사망','')
+    site_ls = site.split('\n')
+    del(site_ls[1])
+    del(site_ls[1])
+    del(site_ls[1])
+    del(site_ls[2])
+    del(site_ls[2])
+    del(site_ls[2])
+    del(site_ls[2])
+    site_ls.pop()
+    st_colona = '확진자 : ' + site_ls[0]+",         완치 : "+site_ls[1]+',         사망 : '+site_ls[2]
+    return st_colona
+
+
 def Change(a):
     a = str(a)
     if a == "01":
@@ -333,6 +394,8 @@ async def on_message(message):
         if "IRON" in hee:
             await message.channel.send("\n\n사람샛기 신가요?")
     
+
+
     if message.content.startswith('/롤 자랭 전적'):
         name = message.content[9:]
         hee = get_lol_free_info(name)
@@ -340,10 +403,24 @@ async def on_message(message):
         await message.channel.send("자랭티어 : "+hee_ls[0]+"\t\t"+hee_ls[1])
         if "IRON" in hee:
             await message.channel.send("\n\n사람샛기 신가요?")
+
+
     if message.content.startswith('/한강물'):
         suon = han_river()
         await message.channel.send("현재 한강물의 온도는 "+suon+" 입니다.")
+    
 
-       
+    if message.content.startswith('/실검'):
+        search = live_search()
+        search.pop()
+        for i in range(len(search)):
+            await message.channel.send(str(i+1)+"."+search[i])
+
+
+    if message.content.startswith('/코로나'):
+        await message.channel.send(Colona())
+
+        
+
 access_token = os.environ["BOT_TOKEN"]
 client.run(access_token)
