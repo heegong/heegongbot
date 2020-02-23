@@ -149,7 +149,17 @@ def live_search():
     site = site.replace('s=spim, NEW,s=keyword em s=num7em','')
     site = site.replace('s=spim, NEW,s=keyword em s=num8em','')
     site = site.replace('s=keyword em s=num9em','')
+    site = site.replace('s=keyword em s=num8em','')
+    site = site.replace('s=keyword em s=num7em','')
+    site = site.replace('s=keyword em s=num6em','')
+    site = site.replace('s=keyword em s=num5em','')
+    site = site.replace('s=keyword em s=num4em','')
+    site = site.replace('s=keyword em s=num3em','')
+    site = site.replace('s=keyword em s=num2em','')
+    site = site.replace('s=keyword em s=num1em','')
+    site = site.replace('s=keyword em s=num10em','')
     site = site.replace('s=spim, NEW,s=keyword em s=num10em','')
+    site = site.replace('s=spim','')
     site_ls = site.split(',')
     for i in range(10):
         del(site_ls[i])
@@ -414,17 +424,13 @@ async def on_message(message):
     if message.content.startswith('/실검'):
         search = live_search()
         search.pop()
-        for i in range(len(search)):
-            if str(i+1) == "11":
-                await message.channel.send('\n실검 끝')
-            else:
-                await message.channel.send(str(i+1)+"."+search[i])
+        for i in range(10):
+            await message.channel.send(str(i+1)+"."+search[i])
 
 
     if message.content.startswith('/코로나'):
         await message.channel.send(Colona())
 
-        
 
 access_token = os.environ["BOT_TOKEN"]
 client.run(access_token)
