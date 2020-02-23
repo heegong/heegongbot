@@ -101,6 +101,7 @@ def get_lol_free_info(name):
     site = site[site.find('등급'):site.find('포인트')+10]
     site = site[site.find('">') + 2:site.rfind("<b")]
     site = site.replace('/font></b><br>','')
+    site = site.replace('/font>','')
     site = site.replace('\t','')
     site = site.replace('\n','')
 
@@ -421,6 +422,5 @@ async def on_message(message):
         await message.channel.send(Colona())
 
         
-
 access_token = os.environ["BOT_TOKEN"]
 client.run(access_token)
