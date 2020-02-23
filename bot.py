@@ -415,7 +415,10 @@ async def on_message(message):
         search = live_search()
         search.pop()
         for i in range(len(search)):
-            await message.channel.send(str(i+1)+"."+search[i])
+            if str(i+1) == "11":
+                await message.channel.send('\n실검 끝')
+            else:
+                await message.channel.send(str(i+1)+"."+search[i])
 
 
     if message.content.startswith('/코로나'):
