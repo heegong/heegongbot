@@ -90,22 +90,25 @@ def get_lol_solo_info(name):
     return site
 
 
-def get_lol_free_info(name):
-    URL = ("http://fow.kr/find/%s" % (name))
+def lol_free_info(name):
+    URL = ("https://poro.gg/ko/s/KR/%s"%name)
     html = get_html(URL)
-    
     soup = BeautifulSoup(html, 'html.parser')
-    site = soup.find_all('div')
-    site = site[256]
-    site = str(site)
-    site = site[site.find('등급'):site.find('포인트')+10]
-    site = site[site.find('">') + 2:site.rfind("<b")]
-    site = site.replace('/font></b><br>','')
-    site = site.replace('/font>','')
-    site = site.replace('\t','')
-    site = site.replace('\n','')
-
-    return site
+    site = soup.find_all("div")
+    site = site[365]
+    site1 = site.find_all('span')
+    site1 = str(site1)
+    site1 = site1[site1.find('">')+2:site1.find('</span')]
+    site2 = site.find_all('b')
+    site2 = str(site2)
+    site2 = site2[site2.find('">')+2:site2.rfind('</b>,')]
+    ls = [site2,site1]
+    
+    if  "Unranked" in ls[0] :
+        st = "언랭이라서 전적이 안나와요 ㅠㅠ"
+    else:
+        st = "자랭티어 : "+ls[0].upper()+"\t\t리그 포인트 : "+ls[1]
+    return st
 
 
 def han_river():
@@ -409,11 +412,10 @@ async def on_message(message):
 
     if message.content.startswith('/롤 자랭 전적'):
         name = message.content[9:]
-        hee = get_lol_free_info(name)
-        hee_ls = hee.split("<")
-        await message.channel.send("자랭티어 : "+hee_ls[0]+"\t\t"+hee_ls[1])
-        if "IRON" in hee:
-            await message.channel.send("\n\n사람샛기 신가요?")
+        st = lol_free_info(name)
+        await message.channel.send(st)
+        if "IRON" in st:
+            await message.channel.send('\n\n사람샛기 신가요?')
 
 
     if message.content.startswith('/한강물'):
@@ -421,16 +423,11 @@ async def on_message(message):
         await message.channel.send("현재 한강물의 온도는 "+suon+" 입니다.")
     
 
-    if message.content.startswith('/실검'):
-        search = live_search()
-        search.pop()
-        for i in range(10):
-            await message.channel.send(str(i+1)+"."+search[i])
-
 
     if message.content.startswith('/코로나'):
         await message.channel.send(Colona())
 
+     
 
 access_token = os.environ["BOT_TOKEN"]
 client.run(access_token)
