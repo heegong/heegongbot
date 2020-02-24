@@ -170,31 +170,24 @@ def live_search():
     return site_ls
 
 
-def Colona():
-    URL = ("https://coronamap.site/")
+def Collona():
+    URL = ("http://www.seoul.go.kr/coronaV/coronaStatus.do")
     html = get_html(URL)
     
     soup = BeautifulSoup(html, 'html.parser')
-    site = soup.find_all('div')
+    site = soup.find_all('p')
+    site = site[15:20]
     site = str(site)
-    site = site[3211:3604]
-    site = site.replace('</div>, <div>602</div>, <div class="content1 clear" style="font-size: 15px;justify-content:space-evenly;padding: 0 11px;">','')
-    site = site.replace('<div>','')
-    site = site.replace('</div>','')
-    site = site.replace('<div style="font-size:13px;color:rgb(47,181,105);font-weight:bolder;">완치','')
-    site = site.replace('<div style="width: 1px; height:100%; background:black;">','')
-    site = site.replace('<div style="font-size:13px;color:red;font-weight:bolder;">사망','')
-    site_ls = site.split('\n')
-    del(site_ls[1])
-    del(site_ls[1])
-    del(site_ls[1])
-    del(site_ls[2])
-    del(site_ls[2])
-    del(site_ls[2])
-    del(site_ls[2])
-    site_ls.pop()
-    st_colona = '확진자 : ' + site_ls[0]+",         완치 : "+site_ls[1]+',         사망 : '+site_ls[2]
-    return st_colona
+    site = site.replace('<p','')
+    site = site.replace('</p>','')
+    site = site.replace(' ','')
+    site = site.replace('[class="counter">','')
+    site = site.replace('class="txt">확진자,class="counter">','')
+    site = site.replace('class="txt">사망자,class="counter">','')
+    site = site.replace(']','')
+    site_ls = site.split(',')
+    st = "확진자 : "+site_ls[0]+"명\t\t완치 : "+site_ls[2]+"명\t\t사망자 : "+site_ls[1]+"명"
+    return st
 
 
 def Change(a):
