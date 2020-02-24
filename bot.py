@@ -418,8 +418,7 @@ async def on_message(message):
 
 
     if message.content.startswith('/코로나'):
-        await message.channel.send(Colona())
-
+        await message.channel.send(Collona())
      
 
 access_token = os.environ["BOT_TOKEN"]
