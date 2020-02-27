@@ -260,12 +260,15 @@ async def on_message(message):
 # get_weather는 기상정보에 대한 정보를 가져옵니다.
         W = obs.get_weather()
         Temp = W.get_temperature(unit='celsius')
-        await message.channel.send(City_name + '의 최고기온은 ' + str(Temp['temp_max']) + ' 도 입니다.')
-        await message.channel.send(City_name + '의 최저기온은 ' + str(Temp['temp_min']) + ' 도 입니다.')
-        await message.channel.send(City_name + '의 현재기온은 ' + str(Temp['temp']) + ' 도 입니다.')
+        a = City_name + '의 최고기온은 ' + str(Temp['temp_max']) + ' 도 입니다.\n'
+        b = City_name + '의 최저기온은 ' + str(Temp['temp_min']) + ' 도 입니다.\n'
+        c = City_name + '의 현재기온은 ' + str(Temp['temp']) + ' 도 입니다.\n'
  
         Status = W.get_status()
-        await message.channel.send(City_name + '의 현재날씨는 ' + Status + ' 입니다.')
+        d = City_name + '의 현재날씨는 ' + Status + ' 입니다.'
+        aa = a+b+c+d
+        embed = discord.Embed(title="날씨", description=aa, color=0x00ff00)
+        await message.channel.send(embed=embed)
 
 
 
@@ -314,9 +317,11 @@ async def on_message(message):
         l_diet = get_diet(local_date2, local_weekday2)    
         lunch = local_date2 + "   오늘 동원중 급식 \n\n" + l_diet + "\n\n\n"   
         if l_diet == " ":
-            await message.channel.send("오늘은 급식이 없어요 ㅠㅠㅠ")
-        else: 
-            await message.channel.send(lunch)  
+            embed = discord.Embed(title="급식", description="오늘은 급식이 없어요 ㅠㅠㅠ", color=0x00ff00)
+            await message.channel.send(embed=embed)
+        else:
+            embed = discord.Embed(title="급식", description=lunch, color=0x00ff00)
+            await message.channel.send(embed=embed)  
 
 
         tommorw = datetime.datetime.today() + datetime.timedelta(days=1)    
@@ -327,9 +332,11 @@ async def on_message(message):
         l_diet = get_diet(local_date2, local_weekday2)    
         lunch = "\n\n"+ local_date2 + "   내일 동원중 급식 \n\n" + l_diet    
         if l_diet == " ":
-            await message.channel.send("내일은 급식이 없어요 ㅠㅠㅠ")
+            embed = discord.Embed(title="급식", description="내일은 급식이 없어요 ㅠㅠㅠ", color=0x00ff00)
+            await message.channel.send(embed=embed)
         else: 
-            await message.channel.send(lunch)
+            embed = discord.Embed(title="급식", description=lunch, color=0x00ff00)
+            await message.channel.send(embed=embed)
 
 
 
@@ -342,9 +349,11 @@ async def on_message(message):
         l_diet = get_diet_bong(local_date2, local_weekday2)    
         lunch = local_date2 + "   오늘 봉화중 급식  \n\n" + l_diet + "\n\n"
         if l_diet == " ":
-            await message.channel.send("오늘은 급식이 없어요 ㅠㅠㅠ")
-        else: 
-            await message.channel.send(lunch)  
+            embed = discord.Embed(title="급식", description="오늘은 급식이 없어요 ㅠㅠㅠ", color=0x00ff00)
+            await message.channel.send(embed=embed)
+        else:
+            embed = discord.Embed(title="급식", description=lunch, color=0x00ff00)
+            await message.channel.send(embed=embed)   
 
 
         tommorw = datetime.datetime.today() + datetime.timedelta(days=1)  
@@ -354,9 +363,11 @@ async def on_message(message):
         l_diet = get_diet_bong(local_date2, local_weekday2)    
         lunch = "\n\n"+ local_date2 + "   내일 봉화중 급식 \n\n" + l_diet    
         if l_diet == " ":
-            await message.channel.send("내일은 급식이 없어요 ㅠㅠㅠ")
+            embed = discord.Embed(title="급식", description="내일은 급식이 없어요 ㅠㅠㅠ", color=0x00ff00)
+            await message.channel.send(embed=embed)
         else: 
-            await message.channel.send(lunch)
+            embed = discord.Embed(title="급식", description=lunch, color=0x00ff00)
+            await message.channel.send(embed=embed)
 
     if message.content.startswith('/급식 봉화중 날짜 : '):
         year = message.content[13:17]
@@ -368,9 +379,11 @@ async def on_message(message):
         _weekday = calendar.weekday(int(year),int(month),int(day)) 
         lunch = "\n\n" + date2 + "의 봉화중 급식 \n\n"+get_diet_bong(date2,_weekday)
         if get_diet_bong(date2,_weekday) == " ":
-            await message.channel.send("그날은 급식이 없어요 ㅠㅠㅠ")
+            embed = discord.Embed(title="급식", description="그날은 급식이 없어요 ㅠㅠㅠ", color=0x00ff00)
+            await message.channel.send(embed=embed)
         else:
-            await message.channel.send(lunch)
+            embed = discord.Embed(title="급식", description=lunch, color=0x00ff00)
+            await message.channel.send(embed=embed)
 
     if message.content.startswith('/급식 동원중 날짜 : '):
         year = message.content[13:17]
@@ -382,9 +395,11 @@ async def on_message(message):
         _weekday = calendar.weekday(int(year),int(month),int(day)) 
         lunch = "\n\n" + date2 + "의 동원중 급식 \n\n"+get_diet(date2,_weekday)
         if get_diet(date2,_weekday) == " ":
-            await message.channel.send("그날은 급식이 없어요 ㅠㅠㅠ")
+            embed = discord.Embed(title="급식", description="그날은 급식이 없어요 ㅠㅠㅠ", color=0x00ff00)
+            await message.channel.send(embed=embed)
         else:
-            await message.channel.send(lunch)
+            embed = discord.Embed(title="급식", description=lunch, color=0x00ff00)
+            await message.channel.send(embed=embed)
 
 
     if message.content.startswith('/롤 솔랭 전적'):
@@ -397,29 +412,36 @@ async def on_message(message):
         tier = tier.replace('"','')
         tier_ls = tier.split('\t')
         del(tier_ls[1:3])
-        await message.channel.send("솔랭티어 : "+tier_ls[0]+"\t\t"+tier_ls[1])
+        embed = discord.Embed(title="롤 전적", description="솔랭티어 : "+tier_ls[0]+"\t\t"+tier_ls[1], color=0x00ff00)
+        await message.channel.send(embed=embed)
         if "IRON" in hee:
-            await message.channel.send("\n\n사람샛기 신가요?")
+            embed = discord.Embed(title="아이언", description="\n\n사람샛기 신가요?", color=0x00ff00)
+            await message.channel.send(embed=embed)
     
 
 
     if message.content.startswith('/롤 자랭 전적'):
         name = message.content[9:]
         st = lol_free_info(name)
-        await message.channel.send(st)
+        embed = discord.Embed(title="롤 전적", description=st, color=0x00ff00)
+        await message.channel.send(embed=embed)
         if "IRON" in st:
-            await message.channel.send('\n\n사람샛기 신가요?')
+            embed = discord.Embed(title="아이언", description='\n\n사람샛기 신가요?', color=0x00ff00)
+            await message.channel.send(embed=embed)
 
 
     if message.content.startswith('/한강물'):
         suon = han_river()
-        await message.channel.send("현재 한강물의 온도는 "+suon+" 입니다.")
+        embed = discord.Embed(title="한강물", description="현재 한강물의 온도는 "+suon+" 입니다.", color=0x00ff00)
+        await message.channel.send(embed=embed)
     
 
 
     if message.content.startswith('/코로나'):
-        await message.channel.send(Collona())
+        a = Collona()
+        embed = discord.Embed(title="코로나", description=a, color=0x00ff00)
+        await message.channel.send(embed=embed)
 
-
+     
 access_token = os.environ["BOT_TOKEN"]
 client.run(access_token)
