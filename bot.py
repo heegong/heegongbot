@@ -107,7 +107,7 @@ def lol_free_info(name):
     if  "Unranked" in ls[0] :
         st = "언랭이라서 전적이 안나와요 ㅠㅠ"
     else:
-        st = "자랭티어 : "+ls[0].upper()+"\t\t리그 포인트 : "+ls[1]
+        st = "자랭티어 : "+ls[0].upper()+"\n리그 포인트 : "+ls[1]
     return st
 
 
@@ -127,47 +127,53 @@ def han_river():
 
 
 def live_search():
-    URL = ("https://search.naver.com/search.naver?sm=top_hty&fbm=1&ie=utf8&query=ㅇ ㅇ")
+    URL = ("https://search.naver.com/search.naver?sm=top_sly.hst&fbm=1&acr=5&ie=utf8&query=%E3%85%87%E3%85%87")
     html = get_html(URL)
     
     soup = BeautifulSoup(html, 'html.parser')
     site = soup.find_all('span')
+    site = site[247:277]
     site = str(site)
-    site = site[43300:45000]
-    site = site.replace('"','')
-    site = site.replace('<','')
-    site = site.replace('>','')
-    site = site.replace('/','')
-    site = site.replace('s=tit _text','')
-    site = site.replace('span','')
-    site = site.replace('clas','')
-    site = site.replace('class','')
-    site = site.replace(' s=keyword em s=num1em  ','')
-    site = site.replace('  s=spim, NEW,  s=keyword em s=num2em  ','')
-    site = site.replace('  ','')
-    site = site.replace('s=spim, NEW,s=keyword em s=num3em','')
-    site = site.replace('s=spim, NEW,s=keyword em s=num4em','')
-    site = site.replace('s=spim, NEW,s=keyword em s=num5em','')
-    site = site.replace('s=spim, NEW,s=keyword em s=num6em','')
-    site = site.replace('s=spim, NEW,s=keyword em s=num7em','')
-    site = site.replace('s=spim, NEW,s=keyword em s=num8em','')
-    site = site.replace('s=keyword em s=num9em','')
-    site = site.replace('s=keyword em s=num8em','')
-    site = site.replace('s=keyword em s=num7em','')
-    site = site.replace('s=keyword em s=num6em','')
-    site = site.replace('s=keyword em s=num5em','')
-    site = site.replace('s=keyword em s=num4em','')
-    site = site.replace('s=keyword em s=num3em','')
-    site = site.replace('s=keyword em s=num2em','')
-    site = site.replace('s=keyword em s=num1em','')
-    site = site.replace('s=keyword em s=num10em','')
-    site = site.replace('s=spim, NEW,s=keyword em s=num10em','')
-    site = site.replace('s=spim','')
-    site_ls = site.split(',')
+    site = site.replace('<span>NEW</span>','')
     for i in range(10):
-        del(site_ls[i])
-        
-    return site_ls
+        site = site.replace('<span class="keyword"><em class="num">'+str(i)+'</em><span class="tit">','')
+    site = site.replace('</span>','')
+    site = site.replace('"spim">','')
+    site = site.replace('"tit">','')
+    site = site.replace('span class=','')
+    site = site.replace('[','')
+    site = site.replace(']','')
+    site = site.replace(' ,','')
+    site = site.replace(',','')
+    site = site.replace('<"keyword"><em class="num">10</em>','')
+    site_ls = site.split('<')
+    del(site_ls[1])
+    del(site_ls[4])
+    del(site_ls[2])
+    del(site_ls[5])
+    a = site_ls[5]
+    a = a[a.find(" ")+1:]
+    site_ls[6] = site_ls[6].replace(a,'') 
+    del(site_ls[7])
+    del(site_ls[9])
+    a = site_ls[1]
+    site_ls[1] = a[site_ls[1].find(' ')+1:]
+
+    a = site_ls[2]
+    site_ls[2] = a[site_ls[2].find(' ')+1:]
+
+    a = site_ls[4]
+    site_ls[4] = a[site_ls[4].find(' ')+1:]
+
+    a = site_ls[5]
+    site_ls[5] = a[site_ls[5].find(' ')+1:]
+
+    a = site_ls[8]
+    site_ls[8] = a[site_ls[8].find(' ')+1:]
+
+    st = "1위\n\n"+site_ls[0]+"\n\n\n\n2위\n\n"+site_ls[1]+"\n\n\n\n3위\n\n"+site_ls[2]+"\n\n\n\n4위\n\n"+site_ls[3]+"\n\n\n\n5위\n\n"+site_ls[4]+"\n\n\n\n6위\n\n"+site_ls[5]+"\n\n\n\n7위\n\n"+site_ls[6]+"\n\n\n\n8위\n\n"+site_ls[7]+"\n\n\n\n9위\n\n"+site_ls[8]+"\n\n\n\n10위\n\n"+site_ls[9]
+
+    return(st)
 
 
 def Collona():
@@ -186,7 +192,7 @@ def Collona():
     site = site.replace(',','')
     site_ls = site.split('>')
     site_ls.pop()
-    st = "확진자 : "+site_ls[0]+"명\t\t완치 : "+site_ls[2]+"명\t\t사망자 : "+site_ls[1]+"명"
+    st = "확진자 : "+site_ls[0]+"명\n완치 : "+site_ls[2]+"명\n사망자 : "+site_ls[1]+"명"
     return st
 
 
@@ -260,6 +266,7 @@ async def on_message(message):
 # get_weather는 기상정보에 대한 정보를 가져옵니다.
         W = obs.get_weather()
         Temp = W.get_temperature(unit='celsius')
+
         a = City_name + '의 최고기온은 ' + str(Temp['temp_max']) + ' 도 입니다.\n'
         b = City_name + '의 최저기온은 ' + str(Temp['temp_min']) + ' 도 입니다.\n'
         c = City_name + '의 현재기온은 ' + str(Temp['temp']) + ' 도 입니다.\n'
@@ -317,11 +324,9 @@ async def on_message(message):
         l_diet = get_diet(local_date2, local_weekday2)    
         lunch = local_date2 + "   오늘 동원중 급식 \n\n" + l_diet + "\n\n\n"   
         if l_diet == " ":
-            embed = discord.Embed(title="급식", description="오늘은 급식이 없어요 ㅠㅠㅠ", color=0x00ff00)
-            await message.channel.send(embed=embed)
+            st = "오늘은 급식이 없어요 ㅠㅠㅠ\n\n"
         else:
-            embed = discord.Embed(title="급식", description=lunch, color=0x00ff00)
-            await message.channel.send(embed=embed)  
+            st = lunch
 
 
         tommorw = datetime.datetime.today() + datetime.timedelta(days=1)    
@@ -332,11 +337,12 @@ async def on_message(message):
         l_diet = get_diet(local_date2, local_weekday2)    
         lunch = "\n\n"+ local_date2 + "   내일 동원중 급식 \n\n" + l_diet    
         if l_diet == " ":
-            embed = discord.Embed(title="급식", description="내일은 급식이 없어요 ㅠㅠㅠ", color=0x00ff00)
-            await message.channel.send(embed=embed)
+            sst = "내일은 급식이 없어요 ㅠㅠㅠ"
         else: 
-            embed = discord.Embed(title="급식", description=lunch, color=0x00ff00)
-            await message.channel.send(embed=embed)
+            sst = lunch
+        embed = discord.Embed(title="급식", description=st+sst, color=0x00ff00)
+        await message.channel.send(embed=embed)
+            
 
 
 
@@ -347,13 +353,11 @@ async def on_message(message):
         
 
         l_diet = get_diet_bong(local_date2, local_weekday2)    
-        lunch = local_date2 + "   오늘 봉화중 급식  \n\n" + l_diet + "\n\n"
+        lunch = local_date2 + "   오늘 봉화중 급식  \n\n" + l_diet + "\n\n\n"
         if l_diet == " ":
-            embed = discord.Embed(title="급식", description="오늘은 급식이 없어요 ㅠㅠㅠ", color=0x00ff00)
-            await message.channel.send(embed=embed)
+            st = '오늘은 급식이 없어요 ㅠㅠㅠ\n\n'
         else:
-            embed = discord.Embed(title="급식", description=lunch, color=0x00ff00)
-            await message.channel.send(embed=embed)   
+            st = lunch  
 
 
         tommorw = datetime.datetime.today() + datetime.timedelta(days=1)  
@@ -363,11 +367,11 @@ async def on_message(message):
         l_diet = get_diet_bong(local_date2, local_weekday2)    
         lunch = "\n\n"+ local_date2 + "   내일 봉화중 급식 \n\n" + l_diet    
         if l_diet == " ":
-            embed = discord.Embed(title="급식", description="내일은 급식이 없어요 ㅠㅠㅠ", color=0x00ff00)
-            await message.channel.send(embed=embed)
+            sst = "내일은 급식이 없어요 ㅠㅠㅠ"
         else: 
-            embed = discord.Embed(title="급식", description=lunch, color=0x00ff00)
-            await message.channel.send(embed=embed)
+            sst = lunch
+        embed = discord.Embed(title="급식", description=st+sst, color=0x00ff00)
+        await message.channel.send(embed=embed)
 
     if message.content.startswith('/급식 봉화중 날짜 : '):
         year = message.content[13:17]
@@ -412,11 +416,13 @@ async def on_message(message):
         tier = tier.replace('"','')
         tier_ls = tier.split('\t')
         del(tier_ls[1:3])
-        embed = discord.Embed(title="롤 전적", description="솔랭티어 : "+tier_ls[0]+"\t\t"+tier_ls[1], color=0x00ff00)
-        await message.channel.send(embed=embed)
+        st = "솔랭티어 : "+tier_ls[0]+"\n"+tier_ls[1]
+        sst = ''
         if "IRON" in hee:
-            embed = discord.Embed(title="아이언", description="\n\n사람샛기 신가요?", color=0x00ff00)
-            await message.channel.send(embed=embed)
+            sst = "\n\n사람샛기 신가요?"
+        embed = discord.Embed(title="롤 전적", description=st+sst, color=0x00ff00)
+        await message.channel.send(embed=embed)
+            
     
 
 
@@ -424,14 +430,18 @@ async def on_message(message):
         name = message.content[9:]
         st = lol_free_info(name)
         embed = discord.Embed(title="롤 전적", description=st, color=0x00ff00)
-        await message.channel.send(embed=embed)
+        sst = ''
         if "IRON" in st:
-            embed = discord.Embed(title="아이언", description='\n\n사람샛기 신가요?', color=0x00ff00)
-            await message.channel.send(embed=embed)
+            sst = '\n\n사람샛기 신가요?'
+        embed = discord.Embed(title="롤 전적", description=st+sst, color=0x00ff00)
+        await message.channel.send(embed=embed)
 
 
     if message.content.startswith('/한강물'):
         suon = han_river()
+        if suon[suon.find('.')+1] == "0":
+            suon = suon.replace('.0','')
+            suon = suon+"도"
         embed = discord.Embed(title="한강물", description="현재 한강물의 온도는 "+suon+" 입니다.", color=0x00ff00)
         await message.channel.send(embed=embed)
     
@@ -442,6 +452,14 @@ async def on_message(message):
         embed = discord.Embed(title="코로나", description=a, color=0x00ff00)
         await message.channel.send(embed=embed)
 
+
+
+    if message.content.startswith('/실검') or message.content.startswith('/실시간 검색어'):
+        st = live_search()
+        embed = discord.Embed(title="실검", description=st, color=0x00ff00)
+        await message.channel.send(embed=embed)
+
      
+
 access_token = os.environ["BOT_TOKEN"]
 client.run(access_token)
