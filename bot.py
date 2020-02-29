@@ -260,21 +260,30 @@ async def on_message(message):
 
 
     if message.content.startswith("/dm"):
-        author = message.guild.get_member(int(message.content[4:22]))
-        msg = message.content[23:]
-        await author.send(msg)
+        if message.author.name == "히공":
+            author = message.guild.get_member(int(message.content[4:22]))
+            msg = message.content[23:]
+            await author.send(msg)
+        else:
+            await message.channel.send('당신은 이 명령어를 사용할 권한이 없습니다.')
 
 
     if message.content.startswith("/아가리"):
-        author = message.guild.get_member(int(message.content[5:23]))
-        role = discord.utils.get(message.guild.roles, name="병신")
-        await author.add_roles(role)
+        if message.author.name == "히공":
+            author = message.guild.get_member(int(message.content[5:23]))
+            role = discord.utils.get(message.guild.roles, name="병신")
+            await author.add_roles(role)
+        else:
+            await message.channel.send('당신은 이 명령어를 사용할 권한이 없습니다.')
 
 
     if message.content.startswith("/언아가리"):
-        author = message.guild.get_member(int(message.content[6:24]))
-        role = discord.utils.get(message.guild.roles, name="병신")
-        await author.remove_roles(role)   
+        if message.author.name == "히공":
+            author = message.guild.get_member(int(message.content[6:24]))
+            role = discord.utils.get(message.guild.roles, name="병신")
+            await author.remove_roles(role)
+        else:
+            await message.channel.send('당신은 이 명령어를 사용할 권한이 없습니다.') 
     
 
 ##schulcode = B100001369, schulCrseScCode = 3, schulKndScCode = 03
@@ -461,97 +470,105 @@ async def on_message(message):
 
 
     elif message.content.startswith('/경고 삭제') or message.content.startswith('/경고삭제'):
-        name = message.content[7:]
-        f = open('경고.txt','r',encoding='utf-8')
-        readfile = f.read()
-        f.close()
-        if name in readfile:
-            f = open('경고.txt','a',encoding='utf-8')
-            find_num = readfile[readfile.rfind(name)+len(name):readfile.rfind(name)+len(name)+4]
-            find_num = find_num.replace(' ','')
-            find_num = find_num.replace('\n','')
-            find_num = find_num.replace('\\','')
-            find_num = int(find_num) - 1
-            find_num = str(find_num)
-            f.write("\n"+name+" "+find_num+"         ")
-            f.close()
+        if message.author.name == "히공":
+            name = message.content[7:]
             f = open('경고.txt','r',encoding='utf-8')
             readfile = f.read()
             f.close()
-            find_num = int(find_num)
-            find_num = find_num + 1
-            find_num = str(find_num)
-            readfile = readfile.replace('\n'+name+" "+find_num+"         ",'')
-            readfile = readfile.replace(name+" "+find_num+"         ",'')
-            f = open('경고.txt','w',encoding='utf-8')
-            f.write(readfile)
-            f.close()
-            find_num = int(find_num) - 1
-            find_num = str(find_num)
-            if find_num == "0":
-                f = open('경고.txt','r',encoding='utf-8')
-                readfile = f.read()
-                f.close()
+            if name in readfile:
+                f = open('경고.txt','a',encoding='utf-8')
                 find_num = readfile[readfile.rfind(name)+len(name):readfile.rfind(name)+len(name)+4]
                 find_num = find_num.replace(' ','')
                 find_num = find_num.replace('\n','')
                 find_num = find_num.replace('\\','')
+                find_num = int(find_num) - 1
+                find_num = str(find_num)
+                f.write("\n"+name+" "+find_num+"         ")
+                f.close()
+                f = open('경고.txt','r',encoding='utf-8')
+                readfile = f.read()
+                f.close()
+                find_num = int(find_num)
+                find_num = find_num + 1
+                find_num = str(find_num)
                 readfile = readfile.replace('\n'+name+" "+find_num+"         ",'')
                 readfile = readfile.replace(name+" "+find_num+"         ",'')
                 f = open('경고.txt','w',encoding='utf-8')
                 f.write(readfile)
                 f.close()
-                embed = discord.Embed(title="경고 삭제", description=name+"님의 경고를 1회 삭제했습니다.\n"+name+"님은 이제 경고가 없습니다.", color=0x00ff00)
-                await message.channel.send(embed=embed)
+                find_num = int(find_num) - 1
+                find_num = str(find_num)
+                if find_num == "0":
+                    f = open('경고.txt','r',encoding='utf-8')
+                    readfile = f.read()
+                    f.close()
+                    find_num = readfile[readfile.rfind(name)+len(name):readfile.rfind(name)+len(name)+4]
+                    find_num = find_num.replace(' ','')
+                    find_num = find_num.replace('\n','')
+                    find_num = find_num.replace('\\','')
+                    readfile = readfile.replace('\n'+name+" "+find_num+"         ",'')
+                    readfile = readfile.replace(name+" "+find_num+"         ",'')
+                    f = open('경고.txt','w',encoding='utf-8')
+                    f.write(readfile)
+                    f.close()
+                    embed = discord.Embed(title="경고 삭제", description=name+"님의 경고를 1회 삭제했습니다.\n"+name+"님은 이제 경고가 없습니다.", color=0x00ff00)
+                    await message.channel.send(embed=embed)
 
-            else:
-                embed = discord.Embed(title="경고 삭제", description=name+"님의 경고를 1회 삭제했습니다.\n총 경고 : "+find_num+"회 입니다.", color=0x00ff00)
-                await message.channel.send(embed=embed)
+                else:
+                    embed = discord.Embed(title="경고 삭제", description=name+"님의 경고를 1회 삭제했습니다.\n총 경고 : "+find_num+"회 입니다.", color=0x00ff00)
+                    await message.channel.send(embed=embed)
             
 
+            else:
+                embed = discord.Embed(title="경고 삭제", description=name+"님은 경고를 받은적이 없습니다.", color=0x00ff00)
+                await message.channel.send(embed=embed)
+
         else:
-            embed = discord.Embed(title="경고 삭제", description=name+"님은 경고를 받은적이 없습니다.", color=0x00ff00)
-            await message.channel.send(embed=embed)
+            await message.channel.send('당신은 이 명령어를 사용할 권한이 없습니다.')
 
 
 
 
     elif message.content.startswith('/경고'):
-        name = message.content[4:]
-        f = open('경고.txt','r',encoding='utf-8')
-        readfile = f.read()
-        f.close()
-        if name in readfile:
-            f = open('경고.txt','a',encoding='utf-8')
-            find_num = readfile[readfile.rfind(name)+len(name):readfile.rfind(name)+len(name)+4]
-            find_num = find_num.replace(' ','')
-            find_num = find_num.replace('\n','')
-            find_num = find_num.replace('\\','')
-            find_num = int(find_num) + 1
-            find_num = str(find_num)
-            f.write("\n"+name+" "+find_num+"         ")
-            f.close()
+        if message.author.name == "히공":
+            name = message.content[4:]
             f = open('경고.txt','r',encoding='utf-8')
             readfile = f.read()
             f.close()
-            readfile = readfile.replace(name+" "+"1"+"         ",'')
-            for i in  range(int(find_num)):
-                readfile = readfile.replace("\n"+name+" "+str(i)+"         ",'')
-                f = open('경고.txt','w',encoding='utf-8')
-                f.write(readfile)
+            if name in readfile:
+                f = open('경고.txt','a',encoding='utf-8')
+                find_num = readfile[readfile.rfind(name)+len(name):readfile.rfind(name)+len(name)+4]
+                find_num = find_num.replace(' ','')
+                find_num = find_num.replace('\n','')
+                find_num = find_num.replace('\\','')
+                find_num = int(find_num) + 1
+                find_num = str(find_num)
+                f.write("\n"+name+" "+find_num+"         ")
                 f.close()
-            embed = discord.Embed(title="경고", description=name+"님의 경고는 총 "+find_num+"회 입니다.", color=0x00ff00)
-            await message.channel.send(embed=embed)
+                f = open('경고.txt','r',encoding='utf-8')
+                readfile = f.read()
+                f.close()
+                readfile = readfile.replace(name+" "+"1"+"         ",'')
+                for i in  range(int(find_num)):
+                    readfile = readfile.replace("\n"+name+" "+str(i)+"         ",'')
+                    f = open('경고.txt','w',encoding='utf-8')
+                    f.write(readfile)
+                    f.close()
+                embed = discord.Embed(title="경고", description=name+"님의 경고는 총 "+find_num+"회 입니다.", color=0x00ff00)
+                await message.channel.send(embed=embed)
+
+            else:
+                f = open('경고.txt','a',encoding='utf-8')
+                f.write("\n"+name+" "+"1"+"              ")
+                f.close()
+                embed = discord.Embed(title="경고", description=name+"님의 경고는 총 1회 입니다.", color=0x00ff00)
+                await message.channel.send(embed=embed)
 
         else:
-            f = open('경고.txt','a',encoding='utf-8')
-            f.write("\n"+name+" "+"1"+"              ")
-            f.close()
-            embed = discord.Embed(title="경고", description=name+"님의 경고는 총 1회 입니다.", color=0x00ff00)
-            await message.channel.send(embed=embed)
+            await message.channel.send('당신은 이 명령어를 사용할 권한이 없습니다.')
 
 
+        
      
-
 access_token = os.environ["BOT_TOKEN"]
 client.run(access_token)
