@@ -132,48 +132,26 @@ def live_search():
     
     soup = BeautifulSoup(html, 'html.parser')
     site = soup.find_all('span')
-    site = site[247:277]
+    site = site[247:278]
     site = str(site)
     site = site.replace('<span>NEW</span>','')
+    site = site.replace('<span class="keyword"><em class="num">10','')
     for i in range(10):
-        site = site.replace('<span class="keyword"><em class="num">'+str(i)+'</em><span class="tit">','')
+        site = site.replace('<span class="keyword"><em class="num">'+str(i),'')
+    site = site.replace('<span class="tit','')
+    site = site.replace('</em>','')
     site = site.replace('</span>','')
-    site = site.replace('"spim">','')
-    site = site.replace('"tit">','')
-    site = site.replace('span class=','')
+    site = site.replace('<span class="spim">','')
+    site = site.replace(',','')
     site = site.replace('[','')
     site = site.replace(']','')
-    site = site.replace(' ,','')
-    site = site.replace(',','')
-    site = site.replace('<"keyword"><em class="num">10</em>','')
-    site_ls = site.split('<')
-    del(site_ls[1])
-    del(site_ls[4])
-    del(site_ls[2])
-    del(site_ls[5])
-    a = site_ls[5]
-    a = a[a.find(" ")+1:]
-    site_ls[6] = site_ls[6].replace(a,'') 
-    del(site_ls[7])
-    del(site_ls[9])
-    a = site_ls[1]
-    site_ls[1] = a[site_ls[1].find(' ')+1:]
-
-    a = site_ls[2]
-    site_ls[2] = a[site_ls[2].find(' ')+1:]
-
-    a = site_ls[4]
-    site_ls[4] = a[site_ls[4].find(' ')+1:]
-
-    a = site_ls[5]
-    site_ls[5] = a[site_ls[5].find(' ')+1:]
-
-    a = site_ls[8]
-    site_ls[8] = a[site_ls[8].find(' ')+1:]
-
-    st = "1위\n\n"+site_ls[0]+"\n\n\n\n2위\n\n"+site_ls[1]+"\n\n\n\n3위\n\n"+site_ls[2]+"\n\n\n\n4위\n\n"+site_ls[3]+"\n\n\n\n5위\n\n"+site_ls[4]+"\n\n\n\n6위\n\n"+site_ls[5]+"\n\n\n\n7위\n\n"+site_ls[6]+"\n\n\n\n8위\n\n"+site_ls[7]+"\n\n\n\n9위\n\n"+site_ls[8]+"\n\n\n\n10위\n\n"+site_ls[9]
-
-    return(st)
+    site_ls = site.split('">')
+    del(site_ls[0])
+    for i in range(9):
+        del(site_ls[i])
+    st = "1위\n\n"+site_ls[0]+"\n\n\n\n2위\n\n"+site_ls[1]+"\n\n\n\n3위\n\n"+site_ls[2]+"\n\n\n\n4위\n\n"+site_ls[3]+"\n\n\n\n5위\n\n"+site_ls[4]+"\n\n\n\n6위\n\n"+site_ls[5]+"\n\n\n\n7위\n\n"+site_ls[6]+"\n\n\n\n8위\n\n"+site_ls[7]+"\n\n\n\n9위\n\n"+site_ls[8]+"\n\n\n\n10위\n\n"+site_ls[9]+"\n"
+        
+    return st
 
 
 def Collona():
@@ -459,7 +437,60 @@ async def on_message(message):
         embed = discord.Embed(title="실검", description=st, color=0x00ff00)
         await message.channel.send(embed=embed)
 
-     
 
+
+    if message.content.startswith('/파일만들기'):
+        f = open('경고.txt','w',encoding='utf-8')
+        f.close()
+        embed = discord.Embed(title="파일만들기", description="파일을 만들었습니다.", color=0x00ff00)
+        await message.channel.send(embed=embed)
+
+
+
+    if message.content.startswith('/경고'):
+        name = message.content[4:]
+        f = open('경고.txt','r',encoding='utf-8')
+        readfile = f.read()
+        f.close()
+        if name in readfile:
+            f = open('경고.txt','a',encoding='utf-8')
+            find_num = readfile[readfile.rfind(name)+len(name):readfile.rfind(name)+len(name)+4]
+            find_num = find_num.replace(' ','')
+            find_num = find_num.replace('\n','')
+            find_num = find_num.replace('\\','')
+            find_num = int(find_num) + 1
+            find_num = str(find_num)
+            f.write("\n"+name+" "+find_num+"         ")
+            f.close()
+            f = open('경고.txt','r',encoding='utf-8')
+            readfile = f.read()
+            f.close()
+            readfile = readfile.replace(name+" "+"1"+"         ",'')
+            for i in  range(int(find_num)):
+                readfile = readfile.replace("\n"+name+" "+str(i)+"         ",'')
+                f = open('경고.txt','w',encoding='utf-8')
+                f.write(readfile)
+                f.close()
+            embed = discord.Embed(title="경고", description=name+"님의 경고는 총 "+find_num+"회 입니다.", color=0x00ff00)
+            await message.channel.send(embed=embed)
+
+        else:
+            f = open('경고.txt','a',encoding='utf-8')
+            f.write("\n"+name+" "+"1"+"              ")
+            f.close()
+            embed = discord.Embed(title="경고", description=name+"님의 경고는 총 1회 입니다.", color=0x00ff00)
+            await message.channel.send(embed=embed)
+
+    if message.content.startswith('/확인 경고') or message.content.startswith('/확인경고'):
+        f = open('경고.txt','r',encoding='utf-8')
+        readfile = f.read()
+        embed = discord.Embed(title="경고 확인", description=readfile, color=0x00ff00)
+        await message.channel.send(embed=embed)
+            
+        
+            
+
+        
+    
 access_token = os.environ["BOT_TOKEN"]
 client.run(access_token)
