@@ -439,7 +439,7 @@ async def on_message(message):
 
 
 
-    if message.content.startswith('/파일만들기'):
+    if message.content.startswith('/파일만들기') or message.content.startswith('/파일만드기'):
         f = open('경고.txt','w',encoding='utf-8')
         f.close()
         embed = discord.Embed(title="파일만들기", description="파일을 만들었습니다.", color=0x00ff00)
@@ -447,7 +447,76 @@ async def on_message(message):
 
 
 
-    if message.content.startswith('/경고'):
+
+
+
+    if message.content.startswith('/경고 확인') or message.content.startswith('/경고확인'):
+        f = open('경고.txt','r',encoding='utf-8')
+        readfile = f.read()
+        embed = discord.Embed(title="경고 확인", description=readfile, color=0x00ff00)
+        await message.channel.send(embed=embed)
+            
+
+
+
+
+    elif message.content.startswith('/경고 삭제') or message.content.startswith('/경고삭제'):
+        name = message.content[7:]
+        f = open('경고.txt','r',encoding='utf-8')
+        readfile = f.read()
+        f.close()
+        if name in readfile:
+            f = open('경고.txt','a',encoding='utf-8')
+            find_num = readfile[readfile.rfind(name)+len(name):readfile.rfind(name)+len(name)+4]
+            find_num = find_num.replace(' ','')
+            find_num = find_num.replace('\n','')
+            find_num = find_num.replace('\\','')
+            find_num = int(find_num) - 1
+            find_num = str(find_num)
+            f.write("\n"+name+" "+find_num+"         ")
+            f.close()
+            f = open('경고.txt','r',encoding='utf-8')
+            readfile = f.read()
+            f.close()
+            find_num = int(find_num)
+            find_num = find_num + 1
+            find_num = str(find_num)
+            readfile = readfile.replace('\n'+name+" "+find_num+"         ",'')
+            readfile = readfile.replace(name+" "+find_num+"         ",'')
+            f = open('경고.txt','w',encoding='utf-8')
+            f.write(readfile)
+            f.close()
+            find_num = int(find_num) - 1
+            find_num = str(find_num)
+            if find_num == "0":
+                f = open('경고.txt','r',encoding='utf-8')
+                readfile = f.read()
+                f.close()
+                find_num = readfile[readfile.rfind(name)+len(name):readfile.rfind(name)+len(name)+4]
+                find_num = find_num.replace(' ','')
+                find_num = find_num.replace('\n','')
+                find_num = find_num.replace('\\','')
+                readfile = readfile.replace('\n'+name+" "+find_num+"         ",'')
+                readfile = readfile.replace(name+" "+find_num+"         ",'')
+                f = open('경고.txt','w',encoding='utf-8')
+                f.write(readfile)
+                f.close()
+                embed = discord.Embed(title="경고 삭제", description=name+"님의 경고를 1회 삭제했습니다.\n"+name+"님은 이제 경고가 없습니다.", color=0x00ff00)
+                await message.channel.send(embed=embed)
+
+            else:
+                embed = discord.Embed(title="경고 삭제", description=name+"님의 경고를 1회 삭제했습니다.\n총 경고 : "+find_num+"회 입니다.", color=0x00ff00)
+                await message.channel.send(embed=embed)
+            
+
+        else:
+            embed = discord.Embed(title="경고 삭제", description=name+"님은 경고를 받은적이 없습니다.", color=0x00ff00)
+            await message.channel.send(embed=embed)
+
+
+
+
+    elif message.content.startswith('/경고'):
         name = message.content[4:]
         f = open('경고.txt','r',encoding='utf-8')
         readfile = f.read()
@@ -481,16 +550,8 @@ async def on_message(message):
             embed = discord.Embed(title="경고", description=name+"님의 경고는 총 1회 입니다.", color=0x00ff00)
             await message.channel.send(embed=embed)
 
-    if message.content.startswith('/확인 경고') or message.content.startswith('/확인경고'):
-        f = open('경고.txt','r',encoding='utf-8')
-        readfile = f.read()
-        embed = discord.Embed(title="경고 확인", description=readfile, color=0x00ff00)
-        await message.channel.send(embed=embed)
-            
-        
-            
 
-        
-    
+     
+
 access_token = os.environ["BOT_TOKEN"]
 client.run(access_token)
