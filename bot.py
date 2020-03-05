@@ -215,18 +215,17 @@ def Collona():
     html = get_html(URL)
     
     soup = BeautifulSoup(html, 'html.parser')
-    site = soup.find_all('p')
-    site = site[15:20]
+    site = soup.select('p.counter')
+    site = site[9:12]
     site = str(site)
-    site = site.replace('[<p class="counter">','')
-    site = site.replace(' <p class="txt">확진자</p>, <p class="counter">','')
-    site = site.replace(' <p class="txt">사망자</p>, <p class="counter">','')
+    site = site.replace('[','')
     site = site.replace(']','')
-    site = site.replace('</p','')
-    site = site.replace(',','')
-    site_ls = site.split('>')
-    site_ls.pop()
-    st = "확진자 : "+site_ls[0]+"명\n완치 : "+site_ls[2]+"명\n사망자 : "+site_ls[1]+"명"
+    site = site.replace('<p class="counter','')
+    site = site.replace('</p>','')
+    site = site[2:]
+    site_ls = site.split(', ">')
+    st = "확진자 : "+site_ls[0]+"명\n완치 : "+site_ls[1]+"명\n사망자 : "+site_ls[2]+"명"
+
     return st
 
 
@@ -640,6 +639,6 @@ async def on_message(message):
 
 
 
-        
+       
 access_token = os.environ["BOT_TOKEN"]
 client.run(access_token)
