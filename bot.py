@@ -63,6 +63,60 @@ def get_diet_bong(ymd,weekday):
     return site
 
 
+def get_diet_both_dong_and_bong():
+    today = datetime.datetime.today()
+    local_date2 = today.strftime("%Y.%m.%d")
+    local_weekday2 = today.weekday() - 1
+    URL =("https://stu.sen.go.kr/sts_sci_md01_001.do?schulCode=B100001369&schulCrseScCode=3&schulKndScCode=03&schYmd=%s"%local_date2) 
+    html = get_html(URL)
+    soup = BeautifulSoup(html, 'html.parser')
+    site = soup.find_all("tr")
+    site = site[2].find_all('td')
+    try:
+        site = site[local_weekday2]
+        site = str(site)
+        site = site.replace('[', '')
+        site = site.replace(']', '')
+        site = site.replace('<br/>', '\n')
+        site = site.replace('<td class="textC last">', '')
+        site = site.replace('<td class="textC">', '')
+        site = site.replace('</td>', '')
+        site = site.replace('amp;', '')
+    except:
+        site = " "         ####동원###여기까찌
+
+
+    URL =("https://stu.sen.go.kr/sts_sci_md01_001.do?schulCode=B100001371&schulCrseScCode=3&schulKndScCode=03&schYmd=%s"%local_date2)
+    html = get_html(URL)
+    soup = BeautifulSoup(html, 'html.parser')
+    site1 = soup.find_all("tr")
+    site1 = site1[2].find_all('td')
+    try:
+        site1 = site1[local_weekday2]
+        site1 = str(site1)
+        site1 = site1.replace('[', '')
+        site1 = site1.replace(']', '')
+        site1 = site1.replace('<br/>', '\n')
+        site1 = site1.replace('<td class="textC last">', '')
+        site1 = site1.replace('<td class="textC">', '')
+        site1 = site1.replace('</td>', '')
+        site1 = site1.replace('amp;', '')
+    except:
+        site1 = " "
+                #####여기까지 봉화#####
+
+
+    if site == " " and site1 == " ":
+        a = "오늘은 동원중,봉화중 급식이 없어요 ㅠㅠㅠ"
+    elif site != " " and site1 == " ":
+        a = '오늘 동원중 급식\n\n'+site+"\n\n\n오늘은 봉화중 급식이 없습니다."
+    elif site == " " and site1 != " ":
+        a = '오늘은 동원중 급식이 없습니다.\n\n\n오늘 봉화중 급식\n\n'+site1
+    else:
+        a = "오늘 동원중 급식\n\n"+site+"오늘 봉화중 급식\n\n"+site1
+    return a
+    
+
 
 def get_lol_solo_info(name):
     URL = ("http://fow.kr/find/%s" % (name))
@@ -240,8 +294,9 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+
     if message.content.startswith("/날씨"):
-# get_weather는 기상정보에 대한 정보를 가져옵니다.
+    # get_weather는 기상정보에 대한 정보를 가져옵니다.
         W = obs.get_weather()
         Temp = W.get_temperature(unit='celsius')
 
@@ -300,6 +355,17 @@ async def on_message(message):
     if message.content.startswith("/현민이 좋아해?"):
         await message.channel.send("어 많이 좋아해")
 
+    if message.content.startswith('/날짜'):
+        today = datetime.datetime.today()
+        today = str(today)
+        embed = discord.Embed(title="날짜", description=today, color=0x00ff00)
+        await message.channel.send(embed=embed)
+
+
+    if message.content.startswith('/급식'):
+        a = get_diet_both_dong_and_bong()
+        embed = discord.Embed(title="급식", description=a, color=0x00ff00)
+        await message.channel.send(embed=embed)
 
 
     if message.content.startswith('/동원중 급식'):
@@ -566,9 +632,5 @@ async def on_message(message):
 
         else:
             await message.channel.send('당신은 이 명령어를 사용할 권한이 없습니다.')
-
-
-        
-     
 access_token = os.environ["BOT_TOKEN"]
 client.run(access_token)
