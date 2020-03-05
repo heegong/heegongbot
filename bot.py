@@ -9,6 +9,10 @@ from parser import *
 from bs4 import BeautifulSoup
 client = discord.Client()
 
+
+
+#호스팅 서버가 미국에 있기 때문에 9시간을 추가 해준다
+
 #################
 def get_html(url):
     _html = ""
@@ -152,12 +156,12 @@ def lol_free_info(name):
     site = site[365]
     site1 = site.find_all('span')
     site1 = str(site1)
+    site1 = site1.replace('<span>자유랭크 5x5</span>, ','')
     site1 = site1[site1.find('">')+2:site1.find('</span')]
     site2 = site.find_all('b')
     site2 = str(site2)
     site2 = site2[site2.find('">')+2:site2.rfind('</b>,')]
     ls = [site2,site1]
-    
     if  "Unranked" in ls[0] :
         st = "언랭이라서 전적이 안나와요 ㅠㅠ"
     else:
@@ -634,5 +638,8 @@ async def on_message(message):
 
 
 
+
+
+        
 access_token = os.environ["BOT_TOKEN"]
 client.run(access_token)
