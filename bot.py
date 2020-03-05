@@ -70,7 +70,7 @@ def get_diet_bong(ymd,weekday):
 def get_diet_both_dong_and_bong():
     today = datetime.datetime.today()  + datetime.timedelta(hours=9)
     local_date2 = today.strftime("%Y.%m.%d")
-    local_weekday2 = today.weekday() - 1
+    local_weekday2 = today.weekday() + 1
     URL =("https://stu.sen.go.kr/sts_sci_md01_001.do?schulCode=B100001369&schulCrseScCode=3&schulKndScCode=03&schYmd=%s"%local_date2) 
     html = get_html(URL)
     soup = BeautifulSoup(html, 'html.parser')
@@ -352,7 +352,7 @@ async def on_message(message):
     if message.content.startswith('/동원중 급식'):
         today = datetime.datetime.today() + datetime.timedelta(hours=9)
         local_date2 = today.strftime("%Y.%m.%d")
-        local_weekday2 = today.weekday() - 1
+        local_weekday2 = today.weekday()
         
 
         l_diet = get_diet(local_date2, local_weekday2)    
@@ -365,7 +365,7 @@ async def on_message(message):
 
         tommorw = datetime.datetime.today() + datetime.timedelta(hours=9) + datetime.timedelta(days=1)    
         local_date2 = tommorw.strftime("%Y.%m.%d")  
-        local_weekday2 = tommorw.weekday() 
+        local_weekday2 = tommorw.weekday() + 1
 
 
         l_diet = get_diet(local_date2, local_weekday2)    
@@ -374,7 +374,7 @@ async def on_message(message):
             sst = "내일은 급식이 없어요 ㅠㅠㅠ"
         else: 
             sst = lunch
-        embed = discord.Embed(title=local_date2+"의 급식", description=st+sst, color=0x00ff00)
+        embed = discord.Embed(title="동원중 급식", description=st+sst, color=0x00ff00)
         await message.channel.send(embed=embed)
             
 
@@ -383,7 +383,7 @@ async def on_message(message):
     if message.content.startswith('/봉화중 급식'):
         today = datetime.datetime.today() + datetime.timedelta(hours=9)
         local_date2 = today.strftime("%Y.%m.%d")
-        local_weekday2 = today.weekday() - 1
+        local_weekday2 = today.weekday()
         
 
         l_diet = get_diet_bong(local_date2, local_weekday2)    
@@ -395,8 +395,8 @@ async def on_message(message):
 
 
         tommorw = datetime.datetime.today() + datetime.timedelta(days=1) + datetime.timedelta(hours=9)
-        local_date2 = tommorw.strftime("%Y.%m.%d")  
-        local_weekday2 = tommorw.weekday() 
+        local_date2 = tommorw.strftime("%Y.%m.%d")
+        local_weekday2 = tommorw.weekday() + 1
 
         l_diet = get_diet_bong(local_date2, local_weekday2)    
         lunch = "\n\n"+ local_date2 + "   내일 봉화중 급식 \n\n" + l_diet    
@@ -404,7 +404,7 @@ async def on_message(message):
             sst = "내일은 급식이 없어요 ㅠㅠㅠ"
         else: 
             sst = lunch
-        embed = discord.Embed(title=local_date2+"의 급식", description=st+sst, color=0x00ff00)
+        embed = discord.Embed(title="봉화중 급식", description=st+sst, color=0x00ff00)
         await message.channel.send(embed=embed)
 
 
@@ -620,7 +620,6 @@ async def on_message(message):
 
 
         
-     
        
 access_token = os.environ["BOT_TOKEN"]
 client.run(access_token)
