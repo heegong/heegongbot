@@ -203,8 +203,6 @@ def live_search():
     del(site_ls[0])
     for i in range(9):
         del(site_ls[i])
-    st = "1위\n\n"+site_ls[0]+"\n\n\n\n2위\n\n"+site_ls[1]+"\n\n\n\n3위\n\n"+site_ls[2]+"\n\n\n\n4위\n\n"+site_ls[3]+"\n\n\n\n5위\n\n"+site_ls[4]+"\n\n\n\n6위\n\n"+site_ls[5]+"\n\n\n\n7위\n\n"+site_ls[6]+"\n\n\n\n8위\n\n"+site_ls[7]+"\n\n\n\n9위\n\n"+site_ls[8]+"\n\n\n\n10위\n\n"+site_ls[9]+"\n"
-        
     return st
 
 
@@ -356,9 +354,10 @@ async def on_message(message):
         await message.channel.send("어 많이 좋아해")
 
     if message.content.startswith('/날짜'):
-        today = datetime.datetime.today()
+        today = datetime.datetime.today() + datetime.timedelta(hours=9)
         today = str(today)
-        embed = discord.Embed(title="날짜", description=today, color=0x00ff00)
+        tommorow = str(datetime.datetime.today() + datetime.timedelta(hours=9) + datetime.timedelta(days=1))
+        embed = discord.Embed(title="날짜", description="오늘 날짜\n\n"+today+'\n\n\n'+"내일 날짜\n\n"+tommorow, color=0x00ff00)
         await message.channel.send(embed=embed)
 
 
@@ -369,7 +368,7 @@ async def on_message(message):
 
 
     if message.content.startswith('/동원중 급식'):
-        today = datetime.datetime.today()
+        today = datetime.datetime.today() + datetime.timedelta(hours=9)
         local_date2 = today.strftime("%Y.%m.%d")
         local_weekday2 = today.weekday() - 1
         
@@ -382,7 +381,7 @@ async def on_message(message):
             st = lunch
 
 
-        tommorw = datetime.datetime.today() + datetime.timedelta(days=1)    
+        tommorw = datetime.datetime.today() + datetime.timedelta(hours=9) + datetime.timedelta(days=1)    
         local_date2 = tommorw.strftime("%Y.%m.%d")  
         local_weekday2 = tommorw.weekday() 
 
@@ -400,7 +399,7 @@ async def on_message(message):
 
 
     if message.content.startswith('/봉화중 급식'):
-        today = datetime.datetime.today()
+        today = datetime.datetime.today() + datetime.timedelta(hours=9)
         local_date2 = today.strftime("%Y.%m.%d")
         local_weekday2 = today.weekday() - 1
         
@@ -413,7 +412,7 @@ async def on_message(message):
             st = lunch  
 
 
-        tommorw = datetime.datetime.today() + datetime.timedelta(days=1)  
+        tommorw = datetime.datetime.today() + datetime.timedelta(days=1) + datetime.timedelta(hours=9)
         local_date2 = tommorw.strftime("%Y.%m.%d")  
         local_weekday2 = tommorw.weekday() 
 
@@ -632,5 +631,8 @@ async def on_message(message):
 
         else:
             await message.channel.send('당신은 이 명령어를 사용할 권한이 없습니다.')
+
+
+
 access_token = os.environ["BOT_TOKEN"]
 client.run(access_token)
