@@ -68,7 +68,7 @@ def get_diet_bong(ymd,weekday):
 
 
 def get_diet_both_dong_and_bong():
-    today = datetime.datetime.today()
+    today = datetime.datetime.today()  + datetime.timedelta(hours=9)
     local_date2 = today.strftime("%Y.%m.%d")
     local_weekday2 = today.weekday() - 1
     URL =("https://stu.sen.go.kr/sts_sci_md01_001.do?schulCode=B100001369&schulCrseScCode=3&schulKndScCode=03&schYmd=%s"%local_date2) 
@@ -184,30 +184,7 @@ def han_river():
     return site
 
 
-def live_search():
-    URL = ("https://search.naver.com/search.naver?sm=top_sly.hst&fbm=1&acr=5&ie=utf8&query=%E3%85%87%E3%85%87")
-    html = get_html(URL)
-    
-    soup = BeautifulSoup(html, 'html.parser')
-    site = soup.find_all('span')
-    site = site[247:278]
-    site = str(site)
-    site = site.replace('<span>NEW</span>','')
-    site = site.replace('<span class="keyword"><em class="num">10','')
-    for i in range(10):
-        site = site.replace('<span class="keyword"><em class="num">'+str(i),'')
-    site = site.replace('<span class="tit','')
-    site = site.replace('</em>','')
-    site = site.replace('</span>','')
-    site = site.replace('<span class="spim">','')
-    site = site.replace(',','')
-    site = site.replace('[','')
-    site = site.replace(']','')
-    site_ls = site.split('">')
-    del(site_ls[0])
-    for i in range(9):
-        del(site_ls[i])
-    return st
+
 
 
 def Collona():
@@ -366,7 +343,9 @@ async def on_message(message):
 
     if message.content.startswith('/급식'):
         a = get_diet_both_dong_and_bong()
-        embed = discord.Embed(title="급식", description=a, color=0x00ff00)
+        today = datetime.datetime.today() + datetime.timedelta(hours=9)
+        local_date2 = today.strftime("%Y.%m.%d")
+        embed = discord.Embed(title=local_date2+"의 급식", description=a, color=0x00ff00)
         await message.channel.send(embed=embed)
 
 
@@ -395,7 +374,7 @@ async def on_message(message):
             sst = "내일은 급식이 없어요 ㅠㅠㅠ"
         else: 
             sst = lunch
-        embed = discord.Embed(title="급식", description=st+sst, color=0x00ff00)
+        embed = discord.Embed(title=local_date2+"의 급식", description=st+sst, color=0x00ff00)
         await message.channel.send(embed=embed)
             
 
@@ -425,8 +404,11 @@ async def on_message(message):
             sst = "내일은 급식이 없어요 ㅠㅠㅠ"
         else: 
             sst = lunch
-        embed = discord.Embed(title="급식", description=st+sst, color=0x00ff00)
+        embed = discord.Embed(title=local_date2+"의 급식", description=st+sst, color=0x00ff00)
         await message.channel.send(embed=embed)
+
+
+
 
     if message.content.startswith('/급식 봉화중 날짜 : '):
         year = message.content[13:17]
@@ -444,6 +426,7 @@ async def on_message(message):
             embed = discord.Embed(title="급식", description=lunch, color=0x00ff00)
             await message.channel.send(embed=embed)
 
+
     if message.content.startswith('/급식 동원중 날짜 : '):
         year = message.content[13:17]
         month = message.content[18:20]
@@ -459,6 +442,7 @@ async def on_message(message):
         else:
             embed = discord.Embed(title="급식", description=lunch, color=0x00ff00)
             await message.channel.send(embed=embed)
+
 
 
     if message.content.startswith('/롤 솔랭 전적'):
@@ -509,10 +493,6 @@ async def on_message(message):
 
 
 
-    if message.content.startswith('/실검') or message.content.startswith('/실시간 검색어'):
-        st = live_search()
-        embed = discord.Embed(title="실검", description=st, color=0x00ff00)
-        await message.channel.send(embed=embed)
 
 
 
@@ -639,6 +619,8 @@ async def on_message(message):
 
 
 
+        
+     
        
 access_token = os.environ["BOT_TOKEN"]
 client.run(access_token)
