@@ -111,13 +111,14 @@ def get_diet_both_dong_and_bong():
 
 
     if site == " " and site1 == " ":
-        a = "오늘은 동원중,봉화중 급식이 없어요 ㅠㅠㅠ"
+        a = ["오늘은 동원중\n급식이 없어요 ㅠㅠㅠ","오늘은 봉화중\n급식이 없어요 ㅠㅠㅠ"]
     elif site != " " and site1 == " ":
-        a = '오늘 동원중 급식\n\n'+site+"\n\n\n오늘은 봉화중 급식이 없습니다."
+        a = ['오늘 동원중 급식\n\n'+site,"오늘은 봉화중\n급식이 없습니다."]
+        
     elif site == " " and site1 != " ":
-        a = '오늘은 동원중 급식이 없습니다.\n\n\n오늘 봉화중 급식\n\n'+site1
+        a = ['오늘은 동원중\n급식이 없습니다.','오늘 봉화중 급식\n\n'+site1]
     else:
-        a = "오늘 동원중 급식\n\n"+site+"오늘 봉화중 급식\n\n"+site1
+        a = ["오늘 동원중 급식\n\n"+site,"오늘 봉화중 급식\n\n"+site1]
     return a
     
 
@@ -165,7 +166,7 @@ def lol_free_info(name):
     if  "Unranked" in ls[0] :
         st = "언랭이라서 전적이 안나와요 ㅠㅠ"
     else:
-        st = "자랭티어 : "+ls[0].upper()+"\n리그 포인트 : "+ls[1]
+        st = "자랭티어 : "+ls[0].upper()+"\n리그 포인트 : "+ls[1]+"LP"
     return st
 
 
@@ -341,12 +342,6 @@ async def on_message(message):
         await message.channel.send(embed=embed)
 
 
-    if message.content.startswith('/급식'):
-        a = get_diet_both_dong_and_bong()
-        today = datetime.datetime.today() + datetime.timedelta(hours=9)
-        local_date2 = today.strftime("%Y.%m.%d")
-        embed = discord.Embed(title=local_date2+"의 급식", description=a, color=0x00ff00)
-        await message.channel.send(embed=embed)
 
 
     if message.content.startswith('/동원중 급식'):
@@ -358,7 +353,7 @@ async def on_message(message):
         l_diet = get_diet(local_date2, local_weekday2)    
         lunch = local_date2 + "   오늘 동원중 급식 \n\n" + l_diet + "\n\n\n"   
         if l_diet == " ":
-            st = "오늘은 급식이 없어요 ㅠㅠㅠ\n\n"
+            st = "오늘은 급식이 없어요"
         else:
             st = lunch
 
@@ -371,10 +366,14 @@ async def on_message(message):
         l_diet = get_diet(local_date2, local_weekday2)    
         lunch = "\n\n"+ local_date2 + "   내일 동원중 급식 \n\n" + l_diet    
         if l_diet == " ":
-            sst = "내일은 급식이 없어요 ㅠㅠㅠ"
+            sst = "내일은 급식이 없어요"
         else: 
             sst = lunch
-        embed = discord.Embed(title="동원중 급식", description=st+sst, color=0x00ff00)
+
+
+        embed = discord.Embed(title="동원중 급식", description="", color=0x00ff00)
+        embed.add_field(name='오늘 급식', value=st, inline=True)
+        embed.add_field(name='내일 급식', value=sst, inline=True)
         await message.channel.send(embed=embed)
             
 
@@ -389,7 +388,7 @@ async def on_message(message):
         l_diet = get_diet_bong(local_date2, local_weekday2)    
         lunch = local_date2 + "   오늘 봉화중 급식  \n\n" + l_diet + "\n\n\n"
         if l_diet == " ":
-            st = '오늘은 급식이 없어요 ㅠㅠㅠ\n\n'
+            st = '오늘은 급식이 없어요'
         else:
             st = lunch  
 
@@ -401,20 +400,22 @@ async def on_message(message):
         l_diet = get_diet_bong(local_date2, local_weekday2)    
         lunch = "\n\n"+ local_date2 + "   내일 봉화중 급식 \n\n" + l_diet    
         if l_diet == " ":
-            sst = "내일은 급식이 없어요 ㅠㅠㅠ"
+            sst = "내일은 급식이 없어요"
         else: 
             sst = lunch
-        embed = discord.Embed(title="봉화중 급식", description=st+sst, color=0x00ff00)
+        embed = discord.Embed(title="봉화중 급식", description="", color=0x00ff00)
+        embed.add_field(name='오늘 급식', value=st, inline=True)
+        embed.add_field(name='내일 급식', value=sst, inline=True)
         await message.channel.send(embed=embed)
 
 
 
 
-    if message.content.startswith('/급식 봉화중 날짜 : '):
-        year = message.content[13:17]
-        month = message.content[18:20]
+    if message.content.startswith('/급식 봉화중 날짜 '):
+        year = message.content[11:15]
+        month = message.content[16:18]
         month2 = month
-        day = message.content[21:23]
+        day = message.content[19:21]
         month = Change(month)
         date2 = year+"."+month2+"."+day
         _weekday = calendar.weekday(int(year),int(month),int(day)) 
@@ -427,11 +428,11 @@ async def on_message(message):
             await message.channel.send(embed=embed)
 
 
-    if message.content.startswith('/급식 동원중 날짜 : '):
-        year = message.content[13:17]
-        month = message.content[18:20]
+    elif message.content.startswith('/급식 동원중 날짜 '):
+        year = message.content[11:15]
+        month = message.content[16:18]
         month2 = month
-        day = message.content[21:23]
+        day = message.content[19:21]
         month = Change(month)
         date2 = year+"."+month2+"."+day
         _weekday = calendar.weekday(int(year),int(month),int(day)) 
@@ -443,6 +444,15 @@ async def on_message(message):
             embed = discord.Embed(title="급식", description=lunch, color=0x00ff00)
             await message.channel.send(embed=embed)
 
+
+    elif message.content.startswith('/급식'):
+        a = get_diet_both_dong_and_bong()
+        today = datetime.datetime.today() + datetime.timedelta(hours=9)
+        local_date2 = today.strftime("%Y.%m.%d")
+        embed = discord.Embed(title=local_date2+"의 급식", description="", color=0x00ff00)
+        embed.add_field(name='동원중 급식', value=a[0], inline=True)
+        embed.add_field(name='봉화중 급식', value=a[1], inline=True)
+        await message.channel.send(embed=embed)
 
 
     if message.content.startswith('/롤 솔랭 전적'):
@@ -575,6 +585,14 @@ async def on_message(message):
             await message.channel.send('당신은 이 명령어를 사용할 권한이 없습니다.')
 
 
+    elif message.content.startswith('/전체 경고 삭제'):
+        if message.author.name == "히공":
+            st = ""
+            f = open('경고.txt','w')
+            f.write(st)
+            f.close
+            embed = discord.Embed(title="전체 경고 삭제", description="경고를 전체 삭제 했습니다.", color=0x00ff00)
+            await message.channel.send(embed=embed)
 
 
     elif message.content.startswith('/경고'):
@@ -618,8 +636,34 @@ async def on_message(message):
 
 
 
+    if message.content.startswith("/도움말"):
+        a = '관리자 명령어\n'
+        b = '/dm : 사용자에게 dm을 보냅니다.\n\n'
+        c = '/아가리 : 사용자를 닥치게 만듭니다.\n\n'
+        d = '/언아가리 : 사용자를 닥치게 했던것을 풀어줍니다.\n\n'
+        e = '/파일만들기 : 경고.txt 파일을 만듭니다.\n\n'
+        f = '/경고 : 사용자에게 경고를 부여합니다.\n\n'
+        g = '/경고 삭제 : 사용자의 경고를 1회 삭제합니다.\n\n'
+        h = '/경고 확인 : 사용자들의 경고를 확인합니다.\n\n/전체 경고 삭제 : 사용자들의 경고를 다 삭제합니다.\n\n'
+        st = b+c+d+e+f+g+h
+        aa = '일반 사용자 명령어'
+        b = '/날짜 : 현재 날짜, 내일 날짜를 알려줍니다.\n\n'
+        c = '/날씨 : 날씨를 알려줍니다.(정확하지않음)\n\n'
+        d = '/동원중 급식 : 동원중의 오늘과 내일 급식을 알려줍니다.\n\n'
+        e = '/봉화중 급식 : 봉화중의 오늘과 내일 급식을 알려줍니다.\n\n'
+        f = '/급식 동원중 날짜 : 입력한 날짜의 동원중 급식을 알려줍니다.\n\n/급식 봉화중 날짜 : 입력한 날짜의 봉화중 급식을 알려줍니다.\n\n'
+        g = '/급식 : 동원중과 봉화중의 오늘 급식을 알려줍니다.\n'
+        h = '/롤 솔랭 전적 : 입력한 닉네임의 롤 솔랭 전적을 알려줍니다.\n\n/롤 자랭 전적 : 입력한 닉네임의 롤 자랭 전적을 알려줍니다.\n\n'
+        sst = b+c+d+e+f+g+h
+        b = "/코로나 : 현재 코로나 상태를 알려줍니다.\n\n"
+        c = '/한강물 : 현재 한강물의 온도를 알려줍니다.'
+        sst += b+c
+        embed = discord.Embed(title='도움말', description="", color=0x00ff00)
+        embed.add_field(name=a, value=st, inline=True)
+        embed.add_field(name=aa, value=sst, inline=True)       
+        await message.channel.send(embed=embed)
 
         
-       
+     
 access_token = os.environ["BOT_TOKEN"]
 client.run(access_token)
