@@ -111,7 +111,7 @@ def get_diet_both_dong_and_bong():
 
 
     if site == " " and site1 == " ":
-        a = ["오늘은 동원중\n급식이 없어요 ㅠㅠㅠ","오늘은 봉화중\n급식이 없어요 ㅠㅠㅠ"]
+        a = ["오늘은 동원중\n급식이 없어요","오늘은 봉화중\n급식이 없어요"]
     elif site != " " and site1 == " ":
         a = ['오늘 동원중 급식\n\n'+site,"오늘은 봉화중\n급식이 없습니다."]
         
@@ -360,7 +360,7 @@ async def on_message(message):
 
         tommorw = datetime.datetime.today() + datetime.timedelta(hours=9) + datetime.timedelta(days=1)    
         local_date2 = tommorw.strftime("%Y.%m.%d")  
-        local_weekday2 = tommorw.weekday() + 1
+        local_weekday2 = tommorw.weekday()
 
 
         l_diet = get_diet(local_date2, local_weekday2)    
@@ -395,7 +395,7 @@ async def on_message(message):
 
         tommorw = datetime.datetime.today() + datetime.timedelta(days=1) + datetime.timedelta(hours=9)
         local_date2 = tommorw.strftime("%Y.%m.%d")
-        local_weekday2 = tommorw.weekday() + 1
+        local_weekday2 = tommorw.weekday()
 
         l_diet = get_diet_bong(local_date2, local_weekday2)    
         lunch = "\n\n"+ local_date2 + "   내일 봉화중 급식 \n\n" + l_diet    
@@ -663,6 +663,7 @@ async def on_message(message):
         embed.add_field(name=aa, value=sst, inline=True)       
         await message.channel.send(embed=embed)
 
+        
         
      
 access_token = os.environ["BOT_TOKEN"]
