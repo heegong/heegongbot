@@ -124,7 +124,7 @@ def get_diet_both_dong_and_bong():
 
 
 def get_lol_solo_info(name):
-    URL = ("http://fow.kr/find/%s" % (name))
+    URL = ("https://poro.gg/ko/s/KR/%s"%name)
     html = get_html(URL)
     
     soup = BeautifulSoup(html, 'html.parser')
@@ -149,12 +149,13 @@ def get_lol_solo_info(name):
     return site
 
 
-def lol_free_info(name):
+def get_lol_free_info(name):
     URL = ("https://poro.gg/ko/s/KR/%s"%name)
     html = get_html(URL)
+    
     soup = BeautifulSoup(html, 'html.parser')
     site = soup.find_all("div")
-    site = site[365]
+    site = site[356]
     site1 = site.find_all('span')
     site1 = str(site1)
     site1 = site1.replace('<span>자유랭크 5x5</span>, ','')
@@ -166,7 +167,7 @@ def lol_free_info(name):
     if  "Unranked" in ls[0] :
         st = "언랭이라서 전적이 안나와요 ㅠㅠ"
     else:
-        st = "자랭티어 : "+ls[0].upper()+"\n리그 포인트 : "+ls[1]+"LP"
+        st = "솔랭티어 : "+ls[0].upper()+"\n리그 포인트 : "+ls[1]
     return st
 
 
@@ -457,17 +458,10 @@ async def on_message(message):
 
     if message.content.startswith('/롤 솔랭 전적'):
         name = message.content[9:]
-        hee = get_lol_solo_info(name)
-        tier = hee[hee.rfind('리그') - 14:hee.rfind('승급전') - 3]
-        tier = tier.replace('822"','')
-        tier = tier.replace('22"','')
-        tier = tier.replace('2"','')
-        tier = tier.replace('"','')
-        tier_ls = tier.split('\t')
-        del(tier_ls[1:3])
-        st = "솔랭티어 : "+tier_ls[0]+"\n"+tier_ls[1]
+        st = get_lol_solo_info(name)
         sst = ''
-        if "IRON" in hee:
+        embed = discord.Embed(title="롤 전적", description=st, color=0x00ff00)
+        if "IRON" in st:
             sst = "\n\n사람샛기 신가요?"
         embed = discord.Embed(title="롤 전적", description=st+sst, color=0x00ff00)
         await message.channel.send(embed=embed)
@@ -477,7 +471,7 @@ async def on_message(message):
 
     if message.content.startswith('/롤 자랭 전적'):
         name = message.content[9:]
-        st = lol_free_info(name)
+        st = get_lol_free_info(name)
         embed = discord.Embed(title="롤 전적", description=st, color=0x00ff00)
         sst = ''
         if "IRON" in st:
@@ -652,7 +646,7 @@ async def on_message(message):
         d = '/동원중 급식 : 동원중의 오늘과 내일 급식을 알려줍니다.\n\n'
         e = '/봉화중 급식 : 봉화중의 오늘과 내일 급식을 알려줍니다.\n\n'
         f = '/급식 동원중 날짜 : 입력한 날짜의 동원중 급식을 알려줍니다.\n\n/급식 봉화중 날짜 : 입력한 날짜의 봉화중 급식을 알려줍니다.\n\n'
-        g = '/급식 : 동원중과 봉화중의 오늘 급식을 알려줍니다.\n'
+        g = '/급식 : 동원중과 봉화중의 오늘 급식을 알려줍니다.\n\n'
         h = '/롤 솔랭 전적 : 입력한 닉네임의 롤 솔랭 전적을 알려줍니다.\n\n/롤 자랭 전적 : 입력한 닉네임의 롤 자랭 전적을 알려줍니다.\n\n'
         sst = b+c+d+e+f+g+h
         b = "/코로나 : 현재 코로나 상태를 알려줍니다.\n\n"
@@ -664,7 +658,7 @@ async def on_message(message):
         await message.channel.send(embed=embed)
 
         
-        
+     
      
 access_token = os.environ["BOT_TOKEN"]
 client.run(access_token)
