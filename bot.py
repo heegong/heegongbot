@@ -128,25 +128,20 @@ def get_lol_solo_info(name):
     html = get_html(URL)
     
     soup = BeautifulSoup(html, 'html.parser')
-    site = soup.find_all('div')
-    site = site[252]
-    try:
-        site = str(site)
-        site = site.replace('<div style="top:7px; left:155px; line-height:14px; position:absolute;">','')
-        site = site.replace('<','')
-        site = site.replace('>','')
-        site = site.replace('/','')
-        site = site.replace('\\','')
-        site = site.replace('br','')
-        site = site.replace('fontb','')
-        site = site.replace('div','')
-        site = site.replace('bfont','')
-        site = site.replace('color','')
-        site = site.replace('=','')
-        site = site.replace('\n','')
-    except:
-        site = " "
-    return site
+    site = soup.find_all("div")
+    site = site[355]
+    site1 = site.find_all("b")
+    site1 = str(site1)
+    site1 = site1[site1.find('">')+2:site1.find('</b>')]
+    site2 = site.find_all('span')
+    site2 = str(site2)
+    site2 = site2[site2.find('">')+2:site2.find("LP")+2]
+    ls = [site2,site1]
+    if  "Unranked" in ls[1] :
+        st = "언랭이라서 전적이 안나와요 ㅠㅠ"
+    else:
+        st = "솔랭티어 : "+ls[1].upper()+"\n리그 포인트 : "+ls[0]
+    return st
 
 
 def get_lol_free_info(name):
@@ -155,19 +150,20 @@ def get_lol_free_info(name):
     
     soup = BeautifulSoup(html, 'html.parser')
     site = soup.find_all("div")
-    site = site[356]
-    site1 = site.find_all('span')
+    site = site[365]
+    site1 = site.find_all("b")
     site1 = str(site1)
-    site1 = site1.replace('<span>자유랭크 5x5</span>, ','')
-    site1 = site1[site1.find('">')+2:site1.find('</span')]
-    site2 = site.find_all('b')
+    site1 = site1[site1.find('">')+2:site1.find('</b>')]
+    site2 = site.find_all('span')
+    site2 = str(site2).replace('<span>자유랭크 5x5</span>, ','')
     site2 = str(site2)
-    site2 = site2[site2.find('">')+2:site2.rfind('</b>,')]
+    site2 = site2[site2.find('">')+2:site2.find("LP")+2]
     ls = [site2,site1]
-    if  "Unranked" in ls[0] :
+    site = str(site)
+    if  not('<b class="summoner__tier' in site):
         st = "언랭이라서 전적이 안나와요 ㅠㅠ"
     else:
-        st = "솔랭티어 : "+ls[0].upper()+"\n리그 포인트 : "+ls[1]
+        st = "자랭티어 : "+ls[1].upper()+"\n리그 포인트 : "+ls[0]
     return st
 
 
@@ -466,10 +462,8 @@ async def on_message(message):
         embed = discord.Embed(title="롤 전적", description=st+sst, color=0x00ff00)
         await message.channel.send(embed=embed)
             
-    
 
-
-    if message.content.startswith('/롤 자랭 전적'):
+    elif message.content.startswith('/롤 자랭 전적'):
         name = message.content[9:]
         st = get_lol_free_info(name)
         embed = discord.Embed(title="롤 전적", description=st, color=0x00ff00)
@@ -478,6 +472,17 @@ async def on_message(message):
             sst = '\n\n사람샛기 신가요?'
         embed = discord.Embed(title="롤 전적", description=st+sst, color=0x00ff00)
         await message.channel.send(embed=embed)
+
+
+    elif message.content.startswith('/롤 전적'):
+        name = message.content[6:]
+        st = get_lol_solo_info(name)
+        sst = get_lol_free_info(name)
+        embed = discord.Embed(title="롤 전적", description="", color=0x00ff00)
+        embed.add_field(name="솔랭", value=st, inline=True)
+        embed.add_field(name="자랭", value=sst, inline=True)
+        await message.channel.send(embed=embed)
+
 
 
     if message.content.startswith('/한강물'):
@@ -658,7 +663,6 @@ async def on_message(message):
         await message.channel.send(embed=embed)
 
         
-     
      
 access_token = os.environ["BOT_TOKEN"]
 client.run(access_token)
