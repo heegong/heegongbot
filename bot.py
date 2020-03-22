@@ -7,18 +7,11 @@ import datetime
 import calendar
 import schedule
 import time
-from selenium import webdriver
 from parser import *
 from bs4 import BeautifulSoup
 
 
-print("하기전")
-chrome_options = webdriver.ChromeOptions()
-chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
-chrome_options.add_argument("--headless")
-chrome_options.add_argument("--disable-dev-shm-usage")
-chrome_options.add_argument("--no-sandbox")
-print("한 후")
+
 
 
 
@@ -221,31 +214,7 @@ def Collona():
 
 
 
-def lyrics(name):
-    dirver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
-    driver.implicitly_wait(1) 
-    driver.get(f'https://www.google.com/search?ei=9752XqiLJsPM-Qb3gJnAAw&q={name}&oq={name}&gs_l=')
-    time.sleep(1)
-    html = driver.page_source
-    soup = BeautifulSoup(html, 'html.parser')
-    driver.close()
-    site = soup.select('div.ujudUb')
-    site = site[1:]
-    site = str(site)
-    site = site.replace('[','')
-    site = site.replace(']','')
-    site = site.replace('<div class="ujudUb WRZytc" jsname="U8S5sf">','')
-    site = site.replace('<span jsname="YS01Ge">','')
-    site = site.replace('</br>','')
-    site = site.replace('</span><br','')
-    site = site.replace('</span></div>','')
-    site = site.replace('<div class="ujudUb" jsname="U8S5sf">','')
-    site = str(site)
-    site_ls = site.split(">")
-    st = ''
-    for i in range(len(site_ls)):
-        st += site_ls[i]+"\n"
-    return st
+
 
 
 def Change(a):
@@ -712,11 +681,6 @@ async def on_message(message):
         await message.channel.send(embed=embed)
 
 
-    if message.content.startswith('/노래 가사'):
-        name = message.content[7:]
-        st = lyrics(name)
-        embed = discord.Embed(title=name+' 가사', description=st, color=0x00ff00)
-        await message.channel.send(embed=embed)
      
 access_token = os.environ["BOT_TOKEN"]
 client.run(access_token)
