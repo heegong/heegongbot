@@ -11,13 +11,14 @@ from selenium import webdriver
 from parser import *
 from bs4 import BeautifulSoup
 
+
+print("하기전")
 chrome_options = webdriver.ChromeOptions()
 chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
 chrome_options.add_argument("--headless")
 chrome_options.add_argument("--disable-dev-shm-usage")
 chrome_options.add_argument("--no-sandbox")
-dirver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
-
+print("한 후")
 
 
 
@@ -221,7 +222,7 @@ def Collona():
 
 
 def lyrics(name):
-    driver = webdriver.Chrome('C:\\chromedriver\\chromedriver.exe')
+    dirver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
     driver.implicitly_wait(1) 
     driver.get(f'https://www.google.com/search?ei=9752XqiLJsPM-Qb3gJnAAw&q={name}&oq={name}&gs_l=')
     time.sleep(1)
