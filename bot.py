@@ -5,6 +5,9 @@ import requests
 import asyncio
 import datetime
 import calendar
+import schedule
+import time
+from selenium import webdriver
 from parser import *
 from bs4 import BeautifulSoup
 client = discord.Client()
@@ -204,6 +207,34 @@ def Collona():
     return st
 
 
+
+def lyrics(name):
+    driver = webdriver.Chrome('C:\\chromedriver\\chromedriver.exe')
+    driver.implicitly_wait(1) 
+    driver.get(f'https://www.google.com/search?ei=9752XqiLJsPM-Qb3gJnAAw&q={name}&oq={name}&gs_l=psy-ab.3..0i67j0l9.141825.145579..145667...2.0..1.167.1383.1j11......0....1..gws-wiz.....0..0i30j0i131.Q_BCYuzKfQ0&ved=0ahUKEwjo4rfb9qzoAhVDZt4KHXdABjgQ4dUDCAs&uact=5')
+    time.sleep(1)
+    html = driver.page_source
+    soup = BeautifulSoup(html, 'html.parser')
+    driver.close()
+    site = soup.select('div.ujudUb')
+    site = site[1:]
+    site = str(site)
+    site = site.replace('[','')
+    site = site.replace(']','')
+    site = site.replace('<div class="ujudUb WRZytc" jsname="U8S5sf">','')
+    site = site.replace('<span jsname="YS01Ge">','')
+    site = site.replace('</br>','')
+    site = site.replace('</span><br','')
+    site = site.replace('</span></div>','')
+    site = site.replace('<div class="ujudUb" jsname="U8S5sf">','')
+    site = str(site)
+    site_ls = site.split(">")
+    st = ''
+    for i in range(len(site_ls)):
+        st += site_ls[i]+"\n"
+    return st
+
+
 def Change(a):
     a = str(a)
     if a == "01":
@@ -264,6 +295,7 @@ async def on_ready():
     print("ready")
     game = discord.Game("저는 히공님의 노예1호 지금은 테스트 용도라서 나중에 버려질꺼랍니다.")
     await client.change_presence(status=discord.Status.online, activity=game)
+
 
 
 
@@ -440,6 +472,8 @@ async def on_message(message):
         else:
             embed = discord.Embed(title="급식", description=lunch, color=0x00ff00)
             await message.channel.send(embed=embed)
+
+
 
 
     elif message.content.startswith('/급식'):
@@ -658,12 +692,18 @@ async def on_message(message):
         b = "/코로나 : 현재 코로나 상태를 알려줍니다.\n\n"
         c = '/한강물 : 현재 한강물의 온도를 알려줍니다.'
         sst += b+c
+        sst += "/노래 가사 : 입력한 노래 가사를 알려줍니다."
         embed = discord.Embed(title='도움말', description="", color=0x00ff00)
         embed.add_field(name=a, value=st, inline=True)
         embed.add_field(name=aa, value=sst, inline=True)       
         await message.channel.send(embed=embed)
 
-        
+
+    if message.content.startswith('/노래 가사'):
+        name = message.content[7:]
+        st = lyrics(name)
+        embed = discord.Embed(title=name+' 가사', description=st, color=0x00ff00)
+        await message.channel.send(embed=embed)
      
 access_token = os.environ["BOT_TOKEN"]
 client.run(access_token)
