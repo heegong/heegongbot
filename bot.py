@@ -699,11 +699,11 @@ async def on_message(message):
         await message.channel.send(embed=embed)
 
 
-    if message.content.startswith('/노래 가사'):
-        name = message.content[7:]
-        st = lyrics(name)
-        embed = discord.Embed(title=name+' 가사', description=st, color=0x00ff00)
-        await message.channel.send(embed=embed)
-
+    # if message.content.startswith('/노래 가사'):
+    #     name = message.content[7:]
+    #     st = lyrics(name)
+    #     embed = discord.Embed(title=name+' 가사', description=st, color=0x00ff00)
+    #     await message.channel.send(embed=embed)
+     
 access_token = os.environ["BOT_TOKEN"]
 client.run(access_token)
