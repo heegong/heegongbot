@@ -3,4 +3,3 @@ requests
 datetime
 pyowm
 bs4
-
