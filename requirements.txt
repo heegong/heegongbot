@@ -3,3 +3,4 @@ requests
 datetime
 pyowm
 bs4
+selenium
