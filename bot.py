@@ -10,6 +10,18 @@ import time
 from selenium import webdriver
 from parser import *
 from bs4 import BeautifulSoup
+
+chrome_options = webdriver.ChromeOptions()
+chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+chrome_options.add_argument("--headless")
+chrome_options.add_argument("--disable-dev-shm-usage")
+chrome_options.add_argument("--no-sandbox")
+dirver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
+
+
+
+
+
 client = discord.Client()
 
 
@@ -211,7 +223,7 @@ def Collona():
 def lyrics(name):
     driver = webdriver.Chrome('C:\\chromedriver\\chromedriver.exe')
     driver.implicitly_wait(1) 
-    driver.get(f'https://www.google.com/search?ei=9752XqiLJsPM-Qb3gJnAAw&q={name}&oq={name}&gs_l=psy-ab.3..0i67j0l9.141825.145579..145667...2.0..1.167.1383.1j11......0....1..gws-wiz.....0..0i30j0i131.Q_BCYuzKfQ0&ved=0ahUKEwjo4rfb9qzoAhVDZt4KHXdABjgQ4dUDCAs&uact=5')
+    driver.get(f'https://www.google.com/search?ei=9752XqiLJsPM-Qb3gJnAAw&q={name}&oq={name}&gs_l=')
     time.sleep(1)
     html = driver.page_source
     soup = BeautifulSoup(html, 'html.parser')
