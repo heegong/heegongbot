@@ -184,26 +184,61 @@ def han_river():
 
     return site
 
-
+def lyrics(name):
+    driver = webdriver.Chrome('C:\\chromedriver\\chromedriver.exe')
+    driver.implicitly_wait(1)
+    driver.get(f'https://www.google.com/search?ei=9752XqiLJsPM-Qb3gJnAAw&q={name}&oq={name}&gs_l=psy-ab.3..0i67j0l9.141825.145579..145667...2.0..1.167.1383.1j11......0....1..gws-wiz.....0..0i30j0i131.Q_BCYuzKfQ0&ved=0ahUKEwjo4rfb9qzoAhVDZt4KHXdABjgQ4dUDCAs&uact=5')
+    time.sleep(1)
+    html = driver.page_source
+    soup = BeautifulSoup(html, 'html.parser')
+    driver.close()
+    site = soup.select('div.ujudUb')
+    site = site[1:]
+    site = str(site)
+    site = site.replace('[','')
+    site = site.replace(']','')
+    site = site.replace('<div class="ujudUb WRZytc" jsname="U8S5sf">','')
+    site = site.replace('<span jsname="YS01Ge">','')
+    site = site.replace('</br>','')
+    site = site.replace('</span><br','')
+    site = site.replace('</span></div>','')
+    site = site.replace('<div class="ujudUb" jsname="U8S5sf">','')
+    site = str(site)
+    site_ls = site.split(">")
+    st = ''
+    for i in range(len(site_ls)):
+        st += site_ls[i]+"\n"
+    return st
 
 
 
 def Collona():
-    URL = ("http://www.seoul.go.kr/coronaV/coronaStatus.do")
-    html = get_html(URL)
-    
-    soup = BeautifulSoup(html, 'html.parser')
-    site = soup.select('p.counter')
-    site = site[9:12]
-    site = str(site)
-    site = site.replace('[','')
+    url = 'http://ncov.mohw.go.kr/'
+    html = requests.get(url).text
+    soup = BeautifulSoup(html,'html.parser')
+    site = soup.find_all('span','num')
+    site = site[:4]
+    site = str(site).replace('[','')
     site = site.replace(']','')
-    site = site.replace('<p class="counter','')
-    site = site.replace('</p>','')
-    site = site[2:]
-    site_ls = site.split(', ">')
-    st = "확진자 : "+site_ls[0]+"명\n완치 : "+site_ls[1]+"명\n사망자 : "+site_ls[2]+"명"
+    site = site.replace('<span class="num">','')
+    site = site.replace('<span class="mini">(누적)','')
+    site = site.replace('</span>','')
+    site = site.replace(',','')
+    site = site.split(' ')
+    site1 = soup.select('span.before')
 
+    site1 = site1[:4]
+    site1 = str(site1).replace('<span class="before">','')
+    site1 = site1.replace('</span>','')
+    site1 = site1.replace('전일대비 ','')
+    site1 = site1.replace('[','')
+    site1 = site1.replace(']','')
+    site1 = site1.split(',')
+    for i in range(len(site1)):
+        site1[i] = str(site1[i]).strip()
+
+    site.extend(site1)
+    st = "확진자   : "+site[0]+" "+site[4]+"\n완치     : "+site[1]+"  "+site[5]+"\n치료환자 : "+site[2]+"  "+site[6]+"\n사망자   : "+site[3]+"   "+site[7]
     return st
 
 
@@ -235,6 +270,29 @@ def lyrics(name):
     return st
 
 
+
+
+def live_search():
+    headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.122 Safari/537.36'}
+    url = 'https://datalab.naver.com/keyword/realtimeList.naver?where=main'
+    html = requests.get(url, headers = headers)
+    soup = BeautifulSoup(html.text, 'html.parser')
+    site = soup.select('span.item_title')
+    site = str(site)
+    site = site.replace('[','')
+    site = site.replace(']','')
+    site = site.replace('<span class="item_title">','')
+    site = site.replace('/span>, ','')
+    site_ls = site.split('<')
+    st = ''
+    for i in range(20):
+        st += str(i+1)+"위 : "+site_ls[i]+"\n"
+    return st
+
+
+
+
+
 def Change(a):
     a = str(a)
     if a == "01":
@@ -259,15 +317,15 @@ def Change(a):
     return a
 ############
 
-API_Key = '52a192d87186e871d8ad7c1300c3730d'
-owm = pyowm.OWM(API_Key)
+# API_Key = '52a192d87186e871d8ad7c1300c3730d'
+# owm = pyowm.OWM(API_Key)
  
-City_ID = 1835848
-obs = owm.weather_at_id(City_ID)    
+# City_ID = 1835848
+# obs = owm.weather_at_id(City_ID)    
  
-# get_location은 지역에 대한 정보를 가져 옵니다.
-L = obs.get_location()
-City_name = L.get_name()
+# # get_location은 지역에 대한 정보를 가져 옵니다.
+# L = obs.get_location()
+# City_name = L.get_name()
 
 
 
@@ -279,7 +337,7 @@ City_name = L.get_name()
 
 
 #############################경고경고경고 명령어#############################################################################
-
+print("안녕")
 
 
 ####
@@ -302,7 +360,7 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-
+    # print("하이")
     if message.content.startswith("/날씨"):
     # get_weather는 기상정보에 대한 정보를 가져옵니다.
         W = obs.get_weather()
@@ -658,7 +716,7 @@ async def on_message(message):
 
             else:
                 f = open('경고.txt','a',encoding='utf-8')
-                f.write("\n"+name+" "+"1"+"              ")
+                f.write("\n"+name+" 1"+"              ")
                 f.close()
                 embed = discord.Embed(title="경고", description=name+"님의 경고는 총 1회 입니다.", color=0x00ff00)
                 await message.channel.send(embed=embed)
@@ -690,20 +748,25 @@ async def on_message(message):
         i = '/롤 전적 : 입력한 닉네임의 솔랭,자랭 전적을 알려줍니다.'
         sst = b+c+d+e+f+g+h+i
         b = "/코로나 : 현재 코로나 상태를 알려줍니다.\n\n"
-        c = '/한강물 : 현재 한강물의 온도를 알려줍니다.'
-        sst += b+c
-        sst += "/노래 가사 : 입력한 노래 가사를 알려줍니다."
+        c = '/한강물 : 현재 한강물의 온도를 알려줍니다.\n\n'
+        d = "/노래 가사 : 입력한 노래 가사를 알려줍니다.\n\n"
+        e = "/실검 : 네이버 실시간 검색어를 알려줍니다.\n\n"
         embed = discord.Embed(title='도움말', description="", color=0x00ff00)
         embed.add_field(name=a, value=st, inline=True)
-        embed.add_field(name=aa, value=sst, inline=True)       
+        embed.add_field(name=aa, value=sst+b+c+d+e, inline=True)
+
         await message.channel.send(embed=embed)
 
 
-    # if message.content.startswith('/노래 가사'):
-    #     name = message.content[7:]
-    #     st = lyrics(name)
-    #     embed = discord.Embed(title=name+' 가사', description=st, color=0x00ff00)
-    #     await message.channel.send(embed=embed)
+    if message.content.startswith('/노래 가사'):
+        name = message.content[7:]
+        st = lyrics(name)
+        embed = discord.Embed(title=name+' 가사', description=st, color=0x00ff00)
+        await message.channel.send(embed=embed)
      
-access_token = os.environ["TOKEN"]
-client.run(access_token)
+
+    if message.content.startswith('/실검') or message.content.startswith('/실시간 검색어'):
+        st = live_search()
+        embed = discord.Embed(title='네이버 실검', description='', color=0x00ff00)
+        embed.add_field(name='전체 연령 기준', value=st, inline=False)
+        await message.channel.send(embed=embed)
