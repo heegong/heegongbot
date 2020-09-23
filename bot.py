@@ -5,7 +5,6 @@ import requests
 import asyncio
 import datetime
 import calendar
-import schedule
 import time
 from selenium import webdriver
 from parser import *
