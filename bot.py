@@ -350,7 +350,7 @@ baseURL = 'https://stu.sen.go.kr/sts_sci_md01_001.do?schulCode=B100001369&schulC
 async def on_ready():
     print(client.user.id)
     print("ready")
-    game = discord.Game("저는 히공님의 노예1호 지금은 테스트 용도라서 나중에 버려질꺼랍니다.")
+    game = discord.Game("저는 히공의 디스코드 봇")
     await client.change_presence(status=discord.Status.online, activity=game)
 
 
@@ -388,19 +388,19 @@ async def on_message(message):
             await message.channel.send('당신은 이 명령어를 사용할 권한이 없습니다.')
 
 
-    if message.content.startswith("/아가리"):
+    if message.content.startswith("/조용히"):
         if message.author.name == "히공":
             author = message.guild.get_member(int(message.content[5:23]))
-            role = discord.utils.get(message.guild.roles, name="병신")
+            role = discord.utils.get(message.guild.roles, name="조용")
             await author.add_roles(role)
         else:
             await message.channel.send('당신은 이 명령어를 사용할 권한이 없습니다.')
 
 
-    if message.content.startswith("/언아가리"):
+    if message.content.startswith("/언조용히"):
         if message.author.name == "히공":
             author = message.guild.get_member(int(message.content[6:24]))
-            role = discord.utils.get(message.guild.roles, name="병신")
+            role = discord.utils.get(message.guild.roles, name="조용")
             await author.remove_roles(role)
         else:
             await message.channel.send('당신은 이 명령어를 사용할 권한이 없습니다.') 
@@ -409,16 +409,7 @@ async def on_message(message):
 ##schulcode = B100001369, schulCrseScCode = 3, schulKndScCode = 03
 #https://stu.sen.go.kr/sts_sci_md01_001.do?schulCode=B100001369&schulCrseScCode=3&schulKndScCode=03&schYmd=2020.03.12
 
-    if message.content.startswith("/안녕"):
-        await message.channel.send("안녕")
-    if message.content.startswith("/시발람아"):
-        await message.channel.send("왜 이새끼야")
-    if message.content.startswith("/엄마있어?"):
-        await message.channel.send("없어 시벌럼아")
-    if message.content.startswith("/아빠는?"):
-        await message.channel.send("없어 개새야")
-    if message.content.startswith("/현민이 좋아해?"):
-        await message.channel.send("어 많이 좋아해")
+
 
     if message.content.startswith('/날짜'):
         today = datetime.datetime.today() + datetime.timedelta(hours=9)
@@ -576,14 +567,7 @@ async def on_message(message):
 
 
 
-    if message.content.startswith('/한강물'):
-        suon = han_river()
-        if suon[suon.find('.')+1] == "0":
-            suon = suon.replace('.0','')
-            suon = suon+"도"
-        embed = discord.Embed(title="한강물", description="현재 한강물의 온도는 "+suon+" 입니다.", color=0x00ff00)
-        await message.channel.send(embed=embed)
-    
+
 
 
     if message.content.startswith('/코로나'):
@@ -729,8 +713,8 @@ async def on_message(message):
     if message.content.startswith("/도움말"):
         a = '관리자 명령어\n'
         b = '/dm : 사용자에게 dm을 보냅니다.\n\n'
-        c = '/아가리 : 사용자를 닥치게 만듭니다.\n\n'
-        d = '/언아가리 : 사용자를 닥치게 했던것을 풀어줍니다.\n\n'
+        c = '/조용히 : 사용자를 조용히 만듭니다.\n\n'
+        d = '/조용히 : 사용자를 조용히 했던것을 풀어줍니다.\n\n'
         e = '/파일만들기 : 경고.txt 파일을 만듭니다.\n\n'
         f = '/경고 : 사용자에게 경고를 부여합니다.\n\n'
         g = '/경고 삭제 : 사용자의 경고를 1회 삭제합니다.\n\n'
@@ -747,12 +731,11 @@ async def on_message(message):
         i = '/롤 전적 : 입력한 닉네임의 솔랭,자랭 전적을 알려줍니다.'
         sst = b+c+d+e+f+g+h+i
         b = "/코로나 : 현재 코로나 상태를 알려줍니다.\n\n"
-        c = '/한강물 : 현재 한강물의 온도를 알려줍니다.\n\n'
         d = "/노래 가사 : 입력한 노래 가사를 알려줍니다.\n\n"
         e = "/실검 : 네이버 실시간 검색어를 알려줍니다.\n\n"
         embed = discord.Embed(title='도움말', description="", color=0x00ff00)
         embed.add_field(name=a, value=st, inline=True)
-        embed.add_field(name=aa, value=sst+b+c+d+e, inline=True)
+        embed.add_field(name=aa, value=sst+b+d+e, inline=True)
 
         await message.channel.send(embed=embed)
 
